@@ -1,10 +1,9 @@
 # Default ignored files
 /shelf/
-/.idea/workspace.xml
-.idea/compiler.xml
-.idea/jarRepositories.xml
-.idea/misc.xml
-.idea/runConfigurations.xml
-.idea/vcs.xml
+/workspace.xml
 .idea
-
+.target
+/src/main.resourcs
+src/main/resources/DisciplinesFEAA.json
+*.json
+*.class
