@@ -6,7 +6,7 @@ public class ScraperApplication {
     public static void main(String[] args){
         TimeTableScraper scraper = new TimeTableScraper();
 
-        //scraper.startScrape();
+        scraper.startScrape();
 
         DataBaseConnection dataBase = new DataBaseConnection();
 

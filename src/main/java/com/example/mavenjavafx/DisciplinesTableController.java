@@ -42,6 +42,11 @@ public class DisciplinesTableController implements Initializable {
             new DisciplinesTable("Programare orientata-obiect","Conf. dr. Gavrilut Dragos, Prof.dr. Lucanu Dorel"),
             new DisciplinesTable("Programare orientata-obiect","Conf. dr. Gavrilut Dragos, Prof.dr. Lucanu Dorel"),
             new DisciplinesTable("Programare orientata-obiect","Conf. dr. Gavrilut Dragos, Prof.dr. Lucanu Dorel"),
+            new DisciplinesTable("Programare orientata-obiect","Conf. dr. Gavrilut Dragos, Prof.dr. Lucanu Dorel"),
+            new DisciplinesTable("Programare orientata-obiect","Conf. dr. Gavrilut Dragos, Prof.dr. Lucanu Dorel"),
+            new DisciplinesTable("Programare orientata-obiect","Conf. dr. Gavrilut Dragos, Prof.dr. Lucanu Dorel"),
+            new DisciplinesTable("Programare orientata-obiect","Conf. dr. Gavrilut Dragos, Prof.dr. Lucanu Dorel"),
+            new DisciplinesTable("Programare orientata-obiect","Conf. dr. Gavrilut Dragos, Prof.dr. Lucanu Dorel"),
             new DisciplinesTable("Programare orientata-obiect","Conf. dr. Gavrilut Dragos, Prof.dr. Lucanu Dorel")
     );
 

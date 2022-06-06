@@ -1,5 +1,6 @@
 package com.scraper;
 
+import com.database.DataBaseService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timeTable.Event;
@@ -373,13 +374,17 @@ public class TimeTableScraper {
             nameOfDiscipline(document,listOfTimeTables);
             type(document,listOfTimeTables);
             nameOfTeacher(document,listOfTimeTables);
-            room(document,listOfTimeTables,listOfRooms);
+            //room(document,listOfTimeTables,listOfRooms);
+
+            DataBaseService dataBaseService = new DataBaseService();
+
+            dataBaseService.addTimeTableInitial(listOfTimeTables);
 
 
-          printTimeTable(listOfTimeTables);
+          //printTimeTable(listOfTimeTables);
 
 
-        } catch (IOException | InterruptedException ex) {
+        } catch (IOException ex){// InterruptedException ex) {
             ex.printStackTrace();
         }
     }
