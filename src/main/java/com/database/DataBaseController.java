@@ -1,11 +1,6 @@
 package com.database;
 
-import com.timeTable.TimeTable;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DataBaseController{
     private static final DataBaseConnection dataBaseConnection = new DataBaseConnection();
@@ -31,7 +26,15 @@ public class DataBaseController{
         catch (SQLException e){
             e.printStackTrace();
         }
+    }
 
+    public ResultSet selectSQL(String sql) throws SQLException {
+
+            ResultSet resultSet = null;
+            Statement statement = dataBaseConnection.getConnection().createStatement();
+            resultSet = statement.executeQuery(sql);
+
+            return resultSet;
 
 
     }

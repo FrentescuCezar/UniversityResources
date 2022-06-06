@@ -57,17 +57,14 @@ public class TimeTableScraper {
     }
 
 
-    private Room createRoom(String info){
-        Room room = new Lecture(0,0,0,0);
-        if(info.contains("curs")){
-            room = new Lecture(0,0,0,0);
-        }
-        else if(info.contains("seminar")){
-            room = new Seminary(0,0,0,0);
-        }
-
-        else if(info.contains("Laboratoare")){
-            room = new Laboratory(0,0,0,0);
+    private Room createRoom(String info) {
+        Room room = new Lecture(0, 0, 0, 0);
+        if (info.contains("curs")) {
+            room = new Lecture(0, 0, 0, 0);
+        } else if (info.contains("seminar")) {
+            room = new Seminary(0, 0, 0, 0);
+        } else if (info.contains("Laboratoare")) {
+            room = new Laboratory(0, 0, 0, 0);
         }
 
         return room;
@@ -89,7 +86,7 @@ public class TimeTableScraper {
             for (Element tr : trTable) {
                 Elements tdTable = tr.getElementsByTag("td");
                 int count = 0;
-                for(Element td : tdTable) {
+                for (Element td : tdTable) {
                     if (daysOfWeek.contains(td.text())) {
                         indexOfEvents--;
 
@@ -107,8 +104,8 @@ public class TimeTableScraper {
                         Elements content = document1.select("body b");
                         String info = "";
                         boolean firstTime = true;
-                        for(Element c : content){
-                            if(firstTime){
+                        for (Element c : content) {
+                            if (firstTime) {
                                 firstTime = false;
                                 continue;
                             }
@@ -118,16 +115,14 @@ public class TimeTableScraper {
                         }
 
 
-                        if(td.text().equals("")) {
+                        if (td.text().equals("")) {
                             System.out.println(event);
-                        }
-                        else{
+                        } else {
                             room = createRoom(info);
 
                             room.setCapacity(Integer.parseInt(info.replaceAll("[^0-9]+", "")));
                             room.setLinkToClass(td.select("a").attr("href"));
                             room.setName(td.text());
-                            //TODO(Razvan) : Set capacity and resources
                             listOfRooms.add(room);
                             event.setRoom(room);
 
@@ -140,7 +135,7 @@ public class TimeTableScraper {
                         }
 
                         //System.out.println(room.getCapacity());
-                       // System.out.println(room.getName());
+                        // System.out.println(room.getName());
 
 
                     }
@@ -169,7 +164,7 @@ public class TimeTableScraper {
             for (Element tr : trTable) {
                 Elements tdTable = tr.getElementsByTag("td");
                 int count = 0;
-                for(Element td : tdTable) {
+                for (Element td : tdTable) {
                     if (daysOfWeek.contains(td.text())) {
                         indexOfEvents--;
 
@@ -179,7 +174,7 @@ public class TimeTableScraper {
 
                         Elements aType = td.select("a");
 
-                        for(Element teacher : aType){
+                        for (Element teacher : aType) {
                             teachers.add(teacher.text());
                         }
                         event.setTeacher(teachers);
@@ -209,7 +204,7 @@ public class TimeTableScraper {
             for (Element tr : trTable) {
                 Elements tdTable = tr.getElementsByTag("td");
                 int count = 0;
-                for(Element td : tdTable) {
+                for (Element td : tdTable) {
                     if (daysOfWeek.contains(td.text())) {
                         indexOfEvents--;
 
@@ -243,7 +238,7 @@ public class TimeTableScraper {
             for (Element tr : trTable) {
                 Elements tdTable = tr.getElementsByTag("td");
                 int count = 0;
-                for(Element td : tdTable) {
+                for (Element td : tdTable) {
                     if (daysOfWeek.contains(td.text())) {
                         indexOfEvents--;
 
@@ -277,7 +272,7 @@ public class TimeTableScraper {
             for (Element tr : trTable) {
                 Elements tdTable = tr.getElementsByTag("td");
                 int count = 0;
-                for(Element td : tdTable) {
+                for (Element td : tdTable) {
                     if (daysOfWeek.contains(td.text())) {
                         indexOfEvents--;
 
@@ -310,17 +305,17 @@ public class TimeTableScraper {
             for (Element tr : trTable) {
                 Elements tdTable = tr.getElementsByTag("td");
                 boolean count = true;
-                    for(Element td : tdTable) {
-                        if (daysOfWeek.contains(td.text())) {
-                            indexOfEvents--;
+                for (Element td : tdTable) {
+                    if (daysOfWeek.contains(td.text())) {
+                        indexOfEvents--;
 
-                        } else if (count) {
-                            Event event = timeTable.listOfEvents.get(indexOfEvents);
-                            event.setStartTime(td.text());
-                            count = false;
+                    } else if (count) {
+                        Event event = timeTable.listOfEvents.get(indexOfEvents);
+                        event.setStartTime(td.text());
+                        count = false;
 
-                        }
                     }
+                }
                 indexOfEvents++;
             }
             indexOfTimeTable++;
@@ -328,7 +323,7 @@ public class TimeTableScraper {
     }
 
 
-    private void daysOfWeek(Document document, List<TimeTable> listOfTimeTables){
+    private void daysOfWeek(Document document, List<TimeTable> listOfTimeTables) {
         Elements tables = document.getElementsByTag("table");
         String dayOfWeek = "";
 
@@ -367,35 +362,36 @@ public class TimeTableScraper {
             List<TimeTable> listOfTimeTables = new ArrayList<>();
             List<Room> listOfRooms = new ArrayList<>();
 
-            nameOfTimeTableScrape(document, listOfTimeTables);
-            daysOfWeek(document, listOfTimeTables);
-            startTime(document,listOfTimeTables);
-            endTime(document,listOfTimeTables);
-            nameOfDiscipline(document,listOfTimeTables);
-            type(document,listOfTimeTables);
-            nameOfTeacher(document,listOfTimeTables);
+            //nameOfTimeTableScrape(document, listOfTimeTables);
+            //daysOfWeek(document, listOfTimeTables);
+            //startTime(document,listOfTimeTables);
+            //endTime(document,listOfTimeTables);
+            //nameOfDiscipline(document,listOfTimeTables);
+            //type(document,listOfTimeTables);
+            //nameOfTeacher(document,listOfTimeTables);
             //room(document,listOfTimeTables,listOfRooms);
 
             DataBaseService dataBaseService = new DataBaseService();
 
-            dataBaseService.addTimeTableInitial(listOfTimeTables);
+            //dataBaseService.addTimeTableInitial(listOfTimeTables);
+            listOfTimeTables = dataBaseService.selectTimeTableInitial();
 
 
-          //printTimeTable(listOfTimeTables);
+            printTimeTable(listOfTimeTables);
 
 
-        } catch (IOException ex){// InterruptedException ex) {
+        } catch (IOException ex) {// InterruptedException ex) {
             ex.printStackTrace();
         }
     }
 
-private void printTimeTable(List<TimeTable> listOfTimeTables) throws JsonProcessingException {
+    private void printTimeTable(List<TimeTable> listOfTimeTables) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
-    for (TimeTable t : listOfTimeTables) {
-        String json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(t);
-        System.out.println(json);
+        for (TimeTable t : listOfTimeTables) {
+            //System.out.println(t.getNameOfTimeTable());
+            System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(t));
+        }
     }
-}
 
 
 }

@@ -8,6 +8,8 @@ module com.example.mavenjavafx {
     requires com.fasterxml.jackson.databind;
     requires org.jsoup;
 
-    opens com.example.mavenjavafx to javafx.fxml;
+    opens com.example.mavenjavafx to javafx.fxml, com.fasterxml.jackson.databind;
     exports com.example.mavenjavafx;
+    exports com.timeTable;
+
 }
