@@ -27,8 +27,6 @@ public class DataBaseController{
             while(resultSet.next()){
                 System.out.println("key : " + resultSet.getString(1));
             }
-
-
         }
         catch (SQLException e){
             e.printStackTrace();

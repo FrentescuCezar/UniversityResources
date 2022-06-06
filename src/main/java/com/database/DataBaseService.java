@@ -17,7 +17,7 @@ public class DataBaseService{
 
             for(TimeTable t : listOfTimeTables){
                 for(Event e : t.listOfEvents){
-                    sql = new StringBuilder("Insert Into dbo.TimeTableInitial (TimeTable, day, start, end, discipline, type, teacher, room, capacity) Values (");
+                    sql = new StringBuilder("Insert Into TimeTableInitial (TimeTable, day, start, TimeTableInitial.[end], discipline, type, teacher, room, capacity) Values (");
                     String TimeTableName = "'" + t.getNameOfTimeTable() + "', ";
                     sql.append(TimeTableName);
                     String day ="'" + e.getDayOfWeek() + "', ";
@@ -30,17 +30,16 @@ public class DataBaseService{
                     sql.append(discipline);
                     String type ="'" + e.getType() + "', ";
                     sql.append(type);
-                    String teacher ="'" + mapper.writeValueAsString(e.getTeacher()) + "', ";
+                    String teacher ="'" + e.getTeacher() + "', ";
                     sql.append(teacher);
                     String room ="'" + "" + "', ";
                     sql.append(room);
                     String capacity = "'" + 0 + "');";
                     sql.append(capacity);
 
-                    getDataBaseController().executeSQL(String.valueOf(sql));
+                    getDataBaseController().executeSQL(sql.toString());
                     System.out.println(sql);
                 }
-
 
             }
         }
