@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mavenjavafx.MenuController">
+    <children>
+        <ImageView fitHeight="799.0" fitWidth="1388.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../../../assets/About.png" />
+            </image>
+        </ImageView>
+      <Button fx:id="backbutton" layoutX="71.0" layoutY="363.0" mnemonicParsing="false" onAction="#switchToMainMenu" opacity="0.0" prefHeight="112.0" prefWidth="246.0" stylesheets="@backbutton.css" />
+    </children>
+</AnchorPane>
