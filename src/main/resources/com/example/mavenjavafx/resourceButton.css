@@ -1,0 +1,14 @@
+#resourceButton:hover{
+    -fx-cursor: hand;
+    -fx-background-color: #ff3892;
+}
+
+#resourceButton{
+    -fx-background-color: #e555d2;
+    -fx-text-fill: white;
+}
+
+.resourceButton:focused {
+    -fx-border-color: #FFFFFF;
+    -fx-border-radius: 2;
+}
