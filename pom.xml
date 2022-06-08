@@ -62,6 +62,13 @@
             <artifactId>mssql-jdbc</artifactId>
             <version>11.1.1.jre17-preview</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.jgrapht</groupId>
+            <artifactId>jgrapht-core</artifactId>
+            <version>1.5.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>

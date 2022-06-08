@@ -16,10 +16,10 @@
          </image>
       </ImageView>
       <Button fx:id="backbutton" layoutX="36.0" layoutY="29.0" mnemonicParsing="false" onAction="#switchToResources" opacity="0.0" prefHeight="82.0" prefWidth="102.0" stylesheets="@backbutton.css" />
-      <TableView fx:id="tableDiscipline" layoutX="491.0" layoutY="190.0" prefHeight="463.0" prefWidth="852.0" stylesheets="@tableview.css">
+      <TableView fx:id="tableDisciplines" layoutX="491.0" layoutY="190.0" prefHeight="463.0" prefWidth="852.0" stylesheets="@tableview.css">
         <columns>
-          <TableColumn fx:id="Discipline" prefWidth="420.0000305175781" text="Discipline" />
-            <TableColumn fx:id="Teacher" minWidth="0.0" prefWidth="413.599853515625" text="Teacher" />
+          <TableColumn fx:id="Discipline2" prefWidth="420.0000305175781" text="Discipline" />
+            <TableColumn fx:id="Teacher2" minWidth="0.0" prefWidth="413.599853515625" text="Teacher" />
         </columns>
       </TableView>
       <Button fx:id="resourceButton" layoutX="138.0" layoutY="435.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="187.0" stylesheets="@resourceButton.css" text="Disciplines">

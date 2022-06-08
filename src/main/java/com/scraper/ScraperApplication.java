@@ -8,8 +8,5 @@ public class ScraperApplication {
 
         scraper.startScrape();
 
-        DataBaseConnection dataBase = new DataBaseConnection();
-
-
     }
 }

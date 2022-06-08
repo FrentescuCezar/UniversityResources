@@ -1,8 +1,6 @@
 package com.example.mavenjavafx;
 
 
-import com.database.DataBaseConnection;
-import com.database.DataBaseController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,7 +23,7 @@ import java.util.ResourceBundle;
 
 import static com.database.DataBaseController.dataBaseConnection;
 
-public class TimetableController implements Initializable {
+public class MiscellaneousController implements Initializable {
 
     double x, y;
     private Stage stage;
@@ -66,7 +64,7 @@ public class TimetableController implements Initializable {
     Connection connection = null;
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
-    Timetable timetable = null;
+
 
 
     ObservableList<Timetable> list = FXCollections.observableArrayList(

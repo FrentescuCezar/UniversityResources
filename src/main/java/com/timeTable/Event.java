@@ -9,9 +9,8 @@ public class Event{
     private String dayOfWeek;
     private String startTime;
     private String endTime;
-    private String nameOfDiscipline;
+    private Discipline discipline;
     private String type;
-    private List<String> teacher;
     private Room room;
 
     @JsonIgnore
@@ -36,16 +35,12 @@ public class Event{
         return endTime;
     }
 
-    public String getNameOfDiscipline() {
-        return nameOfDiscipline;
+    public Discipline getDiscipline() {
+        return discipline;
     }
 
     public String getType() {
         return type;
-    }
-
-    public List<String> getTeacher() {
-        return teacher;
     }
 
     public void setDayOfWeek(String dayOfWeek) {
@@ -60,15 +55,13 @@ public class Event{
         this.endTime = endTime;
     }
 
-    public void setNameOfDiscipline(String nameOfDiscipline) {
-        this.nameOfDiscipline = nameOfDiscipline;
+    public void setDiscipline(Discipline discipline) {
+        this.discipline = discipline;
     }
 
     public void setType(String type) {
         this.type = type;
     }
-
-    public void setTeacher(List<String> teacher) {this.teacher = teacher;}
 
     public void setRoom(Room room) {
         this.room = room;
@@ -80,9 +73,9 @@ public class Event{
                 "dayOfWeek='" + dayOfWeek + '\'' +
                 ", startTime='" + startTime + '\'' +
                 ", endTime='" + endTime + '\'' +
-                ", nameOfDiscipline='" + nameOfDiscipline + '\'' +
+                ", nameOfDiscipline='" + discipline.getName() + '\'' +
                 ", type='" + type + '\'' +
-                ", teacher='" + teacher + '\'' +
+                ", teacher='" + discipline.getTeacher() + '\'' +
                 ", room=" + room +
                 '}';
     }

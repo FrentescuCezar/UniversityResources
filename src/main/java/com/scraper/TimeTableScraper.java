@@ -3,6 +3,7 @@ package com.scraper;
 import com.database.DataBaseService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.timeTable.Discipline;
 import com.timeTable.Event;
 import com.timeTable.classes.Laboratory;
 import com.timeTable.classes.Lecture;
@@ -17,15 +18,12 @@ import org.jsoup.select.Elements;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class TimeTableScraper {
 
     private static final String url = "https://profs.info.uaic.ro/~orar/globale/orar_complet.html";
-    private static final String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36";
+    private static final String userAgent  = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36";
     private static final String referer = "https://google.com";
     private static final List<String> daysOfWeek = new ArrayList<>(Arrays.asList("Luni", "Marti", "Miercuri", "Joi", "Vineri", "Sambata", "Duminica"));
 
@@ -70,8 +68,9 @@ public class TimeTableScraper {
         return room;
     }
 
-    private void room(Document document, List<TimeTable> listOfTimeTables, List<Room> listOfRooms) throws IOException, InterruptedException {
+    private void room(Document document, List<TimeTable> listOfTimeTables, Set<Room> listOfRooms) throws IOException, InterruptedException {
         Elements tables = document.getElementsByTag("table");
+        Set<String> setOfUrl = new HashSet<>();
 
         int indexOfTimeTable = 0;
         int indexOfEvents;
@@ -91,14 +90,15 @@ public class TimeTableScraper {
                         indexOfEvents--;
 
                     } else if (count == 6) {
-                        Event event = timeTable.listOfEvents.get(indexOfEvents);
+                        // Event event = timeTable.listOfEvents.get(indexOfEvents);
 
                         Room room;
                         String urlToConnectRoom = td.select("a").attr("href");
 
                         //System.out.println(urlToConnectRoom);
-                        Thread.sleep(250);
-                        Connection connectToClass = Jsoup.connect("https://profs.info.uaic.ro/~orar" + urlToConnectRoom.replaceFirst(".", "").replaceFirst(".", "")).userAgent(userAgent);
+                        Thread.sleep(500);
+
+                        Connection connectToClass = Jsoup.connect("https://profs.info.uaic.ro/~orar" + urlToConnectRoom.replaceFirst(".", "").replaceFirst(".", "")).userAgent(getUserAgent());
                         Document document1 = connectToClass.get();
 
                         Elements content = document1.select("body b");
@@ -116,24 +116,27 @@ public class TimeTableScraper {
 
 
                         if (td.text().equals("")) {
-                            System.out.println(event);
+                           // System.out.println(event);
                         } else {
                             room = createRoom(info);
-
-                            room.setCapacity(Integer.parseInt(info.replaceAll("[^0-9]+", "")));
+                            if (info.replaceAll("[^0-9]+", "").equals("")){
+                                room.setCapacity(30);
+                            }
+                            else{
+                                room.setCapacity(Integer.parseInt(info.replaceAll("[^0-9]+", "")));
+                            }
                             room.setLinkToClass(td.select("a").attr("href"));
                             room.setName(td.text());
                             listOfRooms.add(room);
-                            event.setRoom(room);
+                            //event.setRoom(room);
 
                             //System.out.println(td.text());
                             //System.out.println(info);
-                            //System.out.println(room.getName());
-                            //System.out.println(room.getCapacity());
-                            //System.out.println(room);
+                            System.out.println(room.getName());
+                            System.out.println(room.getCapacity());
+                            System.out.println(room);
 
                         }
-
                         //System.out.println(room.getCapacity());
                         // System.out.println(room.getName());
 
@@ -170,14 +173,12 @@ public class TimeTableScraper {
 
                     } else if (count == 5) {
                         Event event = timeTable.listOfEvents.get(indexOfEvents);
-                        List<String> teachers = new ArrayList<>();
 
                         Elements aType = td.select("a");
 
                         for (Element teacher : aType) {
-                            teachers.add(teacher.text());
+                           event.getDiscipline().setTeacher(teacher.text());
                         }
-                        event.setTeacher(teachers);
                     }
                     count++;
                 }
@@ -244,7 +245,7 @@ public class TimeTableScraper {
 
                     } else if (count == 3) {
                         Event event = timeTable.listOfEvents.get(indexOfEvents);
-                        event.setNameOfDiscipline(td.select("a").text());
+                        event.setDiscipline(new Discipline(td.select("a").text()));
 
                     }
                     count++;
@@ -360,7 +361,7 @@ public class TimeTableScraper {
             Document document = connectToTimeTable.get();
 
             List<TimeTable> listOfTimeTables = new ArrayList<>();
-            List<Room> listOfRooms = new ArrayList<>();
+            Set<Room> listOfRooms = new HashSet<>();
 
             //nameOfTimeTableScrape(document, listOfTimeTables);
             //daysOfWeek(document, listOfTimeTables);
@@ -374,10 +375,12 @@ public class TimeTableScraper {
             DataBaseService dataBaseService = new DataBaseService();
 
             //dataBaseService.addTimeTableInitial(listOfTimeTables);
-            listOfTimeTables = dataBaseService.selectTimeTableInitial();
+            dataBaseService.addDisciplines(listOfTimeTables);
+            //listOfTimeTables = dataBaseService.selectTimeTableInitial();
 
+            dataBaseService.addRoomsInitial(listOfRooms);
 
-            printTimeTable(listOfTimeTables);
+           // printTimeTable(listOfTimeTables);
 
 
         } catch (IOException ex) {// InterruptedException ex) {

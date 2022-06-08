@@ -1,38 +1,31 @@
 package com.database;
 
 import java.sql.*;
+import java.util.Arrays;
 
 public class DataBaseController{
-    private static final DataBaseConnection dataBaseConnection = new DataBaseConnection();
+    public static final DataBaseConnection dataBaseConnection = new DataBaseConnection();
 
     public DataBaseConnection getDataBaseConnection() {
         return dataBaseConnection;
     }
 
-    public void executeSQL(String sql){
+    public static void executeSQL(PreparedStatement preparedStatement){
         try{
-            PreparedStatement statement = dataBaseConnection.getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            int [] result = preparedStatement.executeBatch();
 
-            ResultSet resultSet = null;
-
-            statement.execute();
-
-            resultSet = statement.getGeneratedKeys();
-
-            while(resultSet.next()){
-                System.out.println("key : " + resultSet.getString(1));
-            }
+            System.out.println(Arrays.toString(result));
         }
         catch (SQLException e){
             e.printStackTrace();
         }
     }
 
-    public ResultSet selectSQL(String sql) throws SQLException {
+    public static ResultSet selectSQL(String sql) throws SQLException {
 
             ResultSet resultSet = null;
-            Statement statement = dataBaseConnection.getConnection().createStatement();
-            resultSet = statement.executeQuery(sql);
+            PreparedStatement preparedStatement = dataBaseConnection.getConnection().prepareStatement(sql);
+            resultSet = preparedStatement.executeQuery();
 
             return resultSet;
 

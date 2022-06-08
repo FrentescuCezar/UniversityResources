@@ -1,8 +1,5 @@
 package com.example.mavenjavafx;
 
-
-import com.database.DataBaseConnection;
-import com.database.DataBaseController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,20 +9,24 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-
 import java.io.IOException;
 import java.net.URL;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import static com.database.DataBaseController.dataBaseConnection;
 
-public class TimetableController implements Initializable {
+public class RoomTableController implements Initializable {
 
     double x, y;
     private Stage stage;
@@ -33,57 +34,48 @@ public class TimetableController implements Initializable {
     private Parent root;
 
     @FXML
-    private TableColumn<Timetable, Integer> Capacity;
+    private TableColumn<RoomTable, Integer> capacity;
 
     @FXML
-    private TableColumn<Timetable, String> Day;
+    private TableColumn<RoomTable, Integer> chalks;
 
     @FXML
-    private TableColumn<Timetable, String> Discipline;
+    private TableColumn<RoomTable, Integer> computers;
 
     @FXML
-    private TableColumn<Timetable, String> End;
+    private TableColumn<RoomTable, String> room;
 
     @FXML
-    private TableColumn<Timetable, String> Room;
+    private TableColumn<RoomTable, Integer> sponges;
 
     @FXML
-    private TableColumn<Timetable, String> Start;
+    private TableView<RoomTable> tableClasses;
 
     @FXML
-    private TableColumn<Timetable, String> Teacher;
+    private TableColumn<RoomTable, String> type;
 
     @FXML
-    private TableColumn<Timetable, String> Timetable;
-
-    @FXML
-    private TableColumn<Timetable, String> Type;
-
-    @FXML
-    private TableView<Timetable> table;
+    private TableColumn<RoomTable, Integer> videoprojectors;
 
     String query = null;
     Connection connection = null;
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
-    Timetable timetable = null;
 
-
-    ObservableList<Timetable> list = FXCollections.observableArrayList(
+    ObservableList<RoomTable> list = FXCollections.observableArrayList(
 
     );
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Timetable.setCellValueFactory(new PropertyValueFactory<Timetable, String>("Timetable"));
-        Day.setCellValueFactory(new PropertyValueFactory<Timetable, String>("Day"));
-        Start.setCellValueFactory(new PropertyValueFactory<Timetable, String>("Start"));
-        End.setCellValueFactory(new PropertyValueFactory<Timetable, String>("End"));
-        Discipline.setCellValueFactory(new PropertyValueFactory<Timetable, String>("Discipline"));
-        Type.setCellValueFactory(new PropertyValueFactory<Timetable, String>("Type"));
-        Teacher.setCellValueFactory(new PropertyValueFactory<Timetable, String>("Teacher"));
-        Room.setCellValueFactory(new PropertyValueFactory<Timetable, String>("Room"));
-        Capacity.setCellValueFactory(new PropertyValueFactory<Timetable, Integer>("Capacity"));
+
+        room.setCellValueFactory(new PropertyValueFactory<RoomTable, String>("room"));
+        type.setCellValueFactory(new PropertyValueFactory<RoomTable, String>("type"));
+        capacity.setCellValueFactory(new PropertyValueFactory<RoomTable, Integer>("capacity"));
+        chalks.setCellValueFactory(new PropertyValueFactory<RoomTable, Integer>("chalks"));
+        sponges.setCellValueFactory(new PropertyValueFactory<RoomTable, Integer>("sponges"));
+        videoprojectors.setCellValueFactory(new PropertyValueFactory<RoomTable, Integer>("videoprojectors"));
+        computers.setCellValueFactory(new PropertyValueFactory<RoomTable, Integer>("computers"));
 
         wrapText();
 
@@ -93,7 +85,169 @@ public class TimetableController implements Initializable {
             throw new RuntimeException(e);
         }
 
+
     }
+
+
+
+    private void loadDate() throws SQLException {
+        list.clear();
+
+        connection = dataBaseConnection.getConnection();
+        query = "SELECT * FROM RoomsInitial";
+        preparedStatement = connection.prepareStatement(query);
+
+        resultSet = preparedStatement.executeQuery();
+
+        while(resultSet.next()){
+            list.add(new RoomTable(
+                            resultSet.getString("room"),
+                            resultSet.getString("type"),
+                            resultSet.getInt("capacity"),
+                            resultSet.getInt("chalk"),
+                            resultSet.getInt("sponge"),
+                            resultSet.getInt("videoprojector"),
+                            resultSet.getInt("computer")
+                    )
+            );
+        }
+
+        tableClasses.setItems(list);
+    }
+
+
+
+
+
+    private void wrapText() {
+
+        room.setCellFactory(param -> new TableCell<RoomTable, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    Text text = new Text(item);
+                    text.setStyle("-fx-text-alignment:justify;");
+                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
+                    setGraphic(text);
+                }
+            }
+        });
+
+        type.setCellFactory(param -> new TableCell<RoomTable, String>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    Text text = new Text(item);
+                    text.setStyle("-fx-text-alignment:justify;");
+                    text.setStyle("-fx-text-fill: white");
+                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
+                    setGraphic(text);
+                }
+            }
+        });
+
+        capacity.setCellFactory(param -> new TableCell<RoomTable, Integer>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    Text text = new Text(item.toString());
+                    text.setStyle("-fx-text-alignment:justify;");
+                    text.setStyle("-fx-text-fill: white");
+                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
+                    setGraphic(text);
+                }
+            }
+        });
+
+        chalks.setCellFactory(param -> new TableCell<RoomTable, Integer>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    Text text = new Text(item.toString());
+                    text.setStyle("-fx-text-alignment:justify;");
+                    text.setStyle("-fx-text-fill: white");
+                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
+                    setGraphic(text);
+                }
+            }
+        });
+
+        sponges.setCellFactory(param -> new TableCell<RoomTable, Integer>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    Text text = new Text(item.toString());
+                    text.setStyle("-fx-text-alignment:justify;");
+                    text.setStyle("-fx-text-fill: white");
+                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
+                    setGraphic(text);
+                }
+            }
+        });
+
+        videoprojectors.setCellFactory(param -> new TableCell<RoomTable, Integer>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    Text text = new Text(item.toString());
+                    text.setStyle("-fx-text-alignment:justify;");
+                    text.setStyle("-fx-text-fill: white");
+                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
+                    setGraphic(text);
+                }
+            }
+        });
+
+        computers.setCellFactory(param -> new TableCell<RoomTable, Integer>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    Text text = new Text(item.toString());
+                    text.setStyle("-fx-text-alignment:justify;");
+                    text.setStyle("-fx-text-fill: white");
+                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
+                    setGraphic(text);
+                }
+            }
+        });
+    }
+
+
 
     public void switchToResources(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Main.class.getResource("resources.fxml"));
@@ -117,192 +271,25 @@ public class TimetableController implements Initializable {
         stage.show();
     }
 
-    private void loadDate() throws SQLException {
-        list.clear();
+    public void switchToDisciplines(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Main.class.getResource("miscellaneous.fxml"));
 
-        connection = dataBaseConnection.getConnection();
-        query = "SELECT * FROM TimeTableInitial";
-        preparedStatement = connection.prepareStatement(query);
 
-        resultSet = preparedStatement.executeQuery();
-
-        while(resultSet.next()){
-            list.add(new Timetable(
-                            resultSet.getString("TimeTable"),
-                            resultSet.getString("day"),
-                            resultSet.getString("start"),
-                            resultSet.getString("end"),
-                            resultSet.getString("discipline"),
-                            resultSet.getString("type"),
-                            resultSet.getString("teacher"),
-                            resultSet.getString("room"),
-                            resultSet.getInt("capacity")
-                    )
-            );
-        }
-
-        table.setItems(list);
-    }
-
-    private void wrapText() {
-        Timetable.setCellFactory(param -> new TableCell<Timetable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
+        root.setOnMousePressed(evt -> {
+            x = evt.getSceneX();
+            y = evt.getSceneY();
+        });
+        root.setOnMouseDragged(evt -> {
+            stage.setX(evt.getScreenX() - x);
+            stage.setY(evt.getScreenY() - y);
         });
 
-        Teacher.setCellFactory(param -> new TableCell<Timetable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
 
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
 
-        Discipline.setCellFactory(param -> new TableCell<Timetable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
 
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.setStyle("-fx-text-fill: white");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
-
-        Day.setCellFactory(param -> new TableCell<Timetable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.setStyle("-fx-text-fill: white");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
-
-        Start.setCellFactory(param -> new TableCell<Timetable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.setStyle("-fx-text-fill: white");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
-
-        End.setCellFactory(param -> new TableCell<Timetable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.setStyle("-fx-text-fill: white");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
-
-        Type.setCellFactory(param -> new TableCell<Timetable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.setStyle("-fx-text-fill: white");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
-
-        Room.setCellFactory(param -> new TableCell<Timetable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.setStyle("-fx-text-fill: white");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
-
-        Capacity.setCellFactory(param -> new TableCell<Timetable, Integer>() {
-            @Override
-            protected void updateItem(Integer item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item.toString());
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.setStyle("-fx-text-fill: white");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
+        stage.setScene(scene);
+        stage.show();
     }
 }
