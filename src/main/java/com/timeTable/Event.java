@@ -4,8 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.timeTable.classes.Room;
 
 import java.util.List;
+import java.util.Objects;
 
-public class Event{
+public class Event {
+    private String timeTableName;
     private String dayOfWeek;
     private String startTime;
     private String endTime;
@@ -22,6 +24,7 @@ public class Event{
     public Room getRoom() {
         return room;
     }
+
     public String getDayOfWeek() {
         return dayOfWeek;
     }
@@ -37,6 +40,10 @@ public class Event{
 
     public Discipline getDiscipline() {
         return discipline;
+    }
+
+    public String getTimeTableName() {
+        return timeTableName;
     }
 
     public String getType() {
@@ -67,16 +74,34 @@ public class Event{
         this.room = room;
     }
 
+    public void setTimeTableName(String timeTableName) {
+        this.timeTableName = timeTableName;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
-                "dayOfWeek='" + dayOfWeek + '\'' +
+                "timeTableName='" + timeTableName + '\'' +
+                ", dayOfWeek='" + dayOfWeek + '\'' +
                 ", startTime='" + startTime + '\'' +
                 ", endTime='" + endTime + '\'' +
-                ", nameOfDiscipline='" + discipline.getName() + '\'' +
+                ", discipline=" + discipline +
                 ", type='" + type + '\'' +
-                ", teacher='" + discipline.getTeacher() + '\'' +
                 ", room=" + room +
+                ", linkToRoom='" + linkToRoom + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return Objects.equals(timeTableName, event.timeTableName) && Objects.equals(dayOfWeek, event.dayOfWeek) && Objects.equals(startTime, event.startTime) && Objects.equals(endTime, event.endTime) && Objects.equals(discipline, event.discipline) && Objects.equals(type, event.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(timeTableName, dayOfWeek, startTime, endTime, discipline, type);
     }
 }

@@ -39,7 +39,7 @@ public class DataBaseService{
 
                       statement.addBatch();
 
-                      getDataBaseController().executeSQL(statement);
+                      DataBaseController.executeSQL(statement);
                       statement.clearParameters();
                       System.out.println(sql);
                   }

@@ -1,5 +1,7 @@
 package com.example.mavenjavafx;
 
+import com.scraper.ScraperApplication;
+import com.scraper.TimeTableScraper;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -32,6 +34,10 @@ public class Main extends Application {
 
         stage.setScene(scene);
         stage.show();
+
+        //TimeTableScraper scraper = new TimeTableScraper();
+
+        //scraper.startScrape();
     }
 
     public static void main(String[] args) {

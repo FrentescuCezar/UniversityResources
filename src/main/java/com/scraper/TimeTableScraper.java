@@ -26,7 +26,8 @@ public class TimeTableScraper {
     private static final String userAgent  = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36";
     private static final String referer = "https://google.com";
     private static final List<String> daysOfWeek = new ArrayList<>(Arrays.asList("Luni", "Marti", "Miercuri", "Joi", "Vineri", "Sambata", "Duminica"));
-
+    public List<TimeTable> listOfTimeTables = new ArrayList<>();
+    public Set<Room> listOfRooms = new HashSet<>();
     public String getReefer() {
         return referer;
     }
@@ -344,6 +345,7 @@ public class TimeTableScraper {
                     Event event = new Event();
                     timeTable.listOfEvents.add(event);
                     event.setDayOfWeek(dayOfWeek);
+                    event.setTimeTableName(timeTable.getNameOfTimeTable());
 
                 }
 
@@ -360,25 +362,22 @@ public class TimeTableScraper {
             Connection connectToTimeTable = Jsoup.connect(getUrl()).userAgent(getUserAgent()).referrer(getReefer());
             Document document = connectToTimeTable.get();
 
-            List<TimeTable> listOfTimeTables = new ArrayList<>();
-            Set<Room> listOfRooms = new HashSet<>();
-
-            //nameOfTimeTableScrape(document, listOfTimeTables);
-            //daysOfWeek(document, listOfTimeTables);
-            //startTime(document,listOfTimeTables);
-            //endTime(document,listOfTimeTables);
-            //nameOfDiscipline(document,listOfTimeTables);
-            //type(document,listOfTimeTables);
-            //nameOfTeacher(document,listOfTimeTables);
+            nameOfTimeTableScrape(document, listOfTimeTables);
+            daysOfWeek(document, listOfTimeTables);
+            startTime(document,listOfTimeTables);
+            endTime(document,listOfTimeTables);
+            nameOfDiscipline(document,listOfTimeTables);
+            type(document,listOfTimeTables);
+            nameOfTeacher(document,listOfTimeTables);
             //room(document,listOfTimeTables,listOfRooms);
 
             DataBaseService dataBaseService = new DataBaseService();
 
             //dataBaseService.addTimeTableInitial(listOfTimeTables);
-            dataBaseService.addDisciplines(listOfTimeTables);
+            //dataBaseService.addDisciplines(listOfTimeTables);
             //listOfTimeTables = dataBaseService.selectTimeTableInitial();
 
-            dataBaseService.addRoomsInitial(listOfRooms);
+            //dataBaseService.addRoomsInitial(listOfRooms);
 
            // printTimeTable(listOfTimeTables);
 
