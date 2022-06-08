@@ -12,5 +12,6 @@ module com.example.mavenjavafx {
     opens com.example.mavenjavafx to javafx.fxml, com.fasterxml.jackson.databind;
     exports com.example.mavenjavafx;
     exports com.timeTable;
+    exports com.timeTable.classes;
 
 }

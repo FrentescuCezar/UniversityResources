@@ -38,6 +38,10 @@ public abstract class Room {
         return numberOfVideoProjectors;
     }
 
+    public int getNumberOfComputers() {
+        return numberOfComputers;
+    }
+
     public String getLinkToClass() {
         return linkToClass;
     }
@@ -64,6 +68,10 @@ public abstract class Room {
 
     public void setNumberOfVideoProjectors(int numberOfVideoProjectors) {
         this.numberOfVideoProjectors = numberOfVideoProjectors;
+    }
+
+    public void setNumberOfComputers(int numberOfComputers) {
+        this.numberOfComputers = numberOfComputers;
     }
 
     public void setLinkToClass(String linkToClass) {

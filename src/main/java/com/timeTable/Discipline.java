@@ -35,6 +35,15 @@ public class Discipline {
         this.teacher = teacher;
     }
 
+
+    @Override
+    public String toString() {
+        return "Discipline{" +
+                "name='" + name + '\'' +
+                ", teacher=" + teacher +
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
