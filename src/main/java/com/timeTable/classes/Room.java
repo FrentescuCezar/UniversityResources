@@ -2,6 +2,8 @@ package com.timeTable.classes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.Objects;
+
 public abstract class Room {
     public TypeOfRoom type;
     private String name;
@@ -88,5 +90,18 @@ public abstract class Room {
                 ", capacity=" + capacity +
                 ", linkToClass='" + linkToClass + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Room room = (Room) o;
+        return capacity == room.capacity && numberOfChalk == room.numberOfChalk && numberOfSponges == room.numberOfSponges && numberOfVideoProjectors == room.numberOfVideoProjectors && numberOfComputers == room.numberOfComputers && type == room.type && Objects.equals(name, room.name) && Objects.equals(linkToClass, room.linkToClass);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, name, capacity, numberOfChalk, numberOfSponges, numberOfVideoProjectors, numberOfComputers, linkToClass);
     }
 }

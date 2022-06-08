@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mavenjavafx.MenuController">
+   <children>
+      <ImageView fitHeight="799.0" fitWidth="1388.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../assets/Menu.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="button" layoutX="148.0" layoutY="452.0" mnemonicParsing="false" onAction="#switchToAbout" prefHeight="83.0" prefWidth="226.0" stylesheets="@button.css" text="ABOUT" textOverrun="CLIP">
+         <font>
+            <Font name="Barlow Condensed Light" size="30.0" />
+         </font>
+      </Button>
+      <Button fx:id="button" layoutX="244.0" layoutY="595.0" mnemonicParsing="false" onAction="#exitButton" prefHeight="83.0" prefWidth="226.0" stylesheets="@button.css" text="EXIT">
+         <font>
+            <Font name="Barlow Condensed Light" size="30.0" />
+         </font>
+      </Button>
+      <Button fx:id="button" layoutX="41.0" layoutY="312.0" mnemonicParsing="false" onAction="#switchToResources" prefHeight="83.0" prefWidth="226.0" stylesheets="@button.css" text="RESOURCES">
+         <font>
+            <Font name="Barlow Condensed Light" size="30.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

@@ -1,0 +1,14 @@
+#button:hover{
+    -fx-blend-mode: lighten;
+    -fx-cursor: hand;
+}
+
+#button{
+    -fx-background-color: #ffffff;
+}
+
+.button:focused {
+    -fx-border-color: #FFFFFF;
+    -fx-border-radius: 2;
+}
+
