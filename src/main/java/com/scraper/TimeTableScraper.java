@@ -21,11 +21,12 @@ import java.util.*;
 public class TimeTableScraper {
 
     private static final String url = "https://profs.info.uaic.ro/~orar/globale/orar_complet.html";
-    private static final String userAgent  = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36";
+    private static final String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36";
     private static final String referer = "https://google.com";
     private static final List<String> daysOfWeek = new ArrayList<>(Arrays.asList("Luni", "Marti", "Miercuri", "Joi", "Vineri", "Sambata", "Duminica"));
     public List<TimeTable> listOfTimeTables = new ArrayList<>();
     public List<Room> listOfRooms = new ArrayList<>();
+
     public String getReefer() {
         return referer;
     }
@@ -115,13 +116,12 @@ public class TimeTableScraper {
 
 
                         if (td.text().equals("")) {
-                           // System.out.println(event);
+                            // System.out.println(event);
                         } else {
                             room = createRoom(info);
-                            if (info.replaceAll("[^0-9]+", "").equals("")){
+                            if (info.replaceAll("[^0-9]+", "").equals("")) {
                                 room.setCapacity(30);
-                            }
-                            else{
+                            } else {
                                 room.setCapacity(Integer.parseInt(info.replaceAll("[^0-9]+", "")));
                             }
                             //room.setLinkToClass(td.select("a").attr("href"));
@@ -176,7 +176,7 @@ public class TimeTableScraper {
                         Elements aType = td.select("a");
 
                         for (Element teacher : aType) {
-                           event.getDiscipline().setTeacher(teacher.text());
+                            event.getDiscipline().setTeacher(teacher.text());
                         }
                     }
                     count++;
@@ -362,40 +362,29 @@ public class TimeTableScraper {
 
             nameOfTimeTableScrape(document, listOfTimeTables);
             daysOfWeek(document, listOfTimeTables);
-            startTime(document,listOfTimeTables);
-            endTime(document,listOfTimeTables);
-            nameOfDiscipline(document,listOfTimeTables);
-            type(document,listOfTimeTables);
-            nameOfTeacher(document,listOfTimeTables);
-            //room....
-
+            startTime(document, listOfTimeTables);
+            endTime(document, listOfTimeTables);
+            nameOfDiscipline(document, listOfTimeTables);
+            type(document, listOfTimeTables);
+            nameOfTeacher(document, listOfTimeTables);
+//
             DataBaseService dataBaseService = new DataBaseService();
 
             filterTimeTables();
-
 
             this.listOfRooms = dataBaseService.selectRoomInitial();
 
 
             Miscellaneous miscellaneous = Miscellaneous.getInstance();
 
-            dataBaseService.selectMiscellaneous();
-
-            //dataBaseService.addTimeTableInitial(listOfTimeTables);
-            //dataBaseService.addDisciplines(listOfTimeTables);
-            //listOfTimeTables = dataBaseService.selectTimeTableInitial();
-
-            //dataBaseService.addRoomsInitial(listOfRooms);
-
-            //printTimeTable(listOfTimeTables);
 
 
-        } catch (IOException | SQLException ex) {// InterruptedException ex) {
+        } catch (IOException | SQLException ex) {
             ex.printStackTrace();
         }
     }
 
-    private void filterTimeTables(){
+    private void filterTimeTables() {
         List<TimeTable> newListOfTimeTables = listOfTimeTables;
         newListOfTimeTables.removeIf(t -> t.checkNameTimeTableForFilter(t));
         this.listOfTimeTables = newListOfTimeTables;
@@ -404,9 +393,9 @@ public class TimeTableScraper {
     public void printTimeTable(List<TimeTable> listOfTimeTables) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         for (TimeTable t : listOfTimeTables) {
-           for(Event e : t.listOfEvents){
-               System.out.println(e + "\n\n\n\n");
-           }
+            for (Event e : t.listOfEvents) {
+                System.out.println(e + "\n\n\n\n");
+            }
         }
     }
 }

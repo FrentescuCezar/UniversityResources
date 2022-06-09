@@ -1,6 +1,9 @@
 package com.example.mavenjavafx;
 
 import com.database.DataBaseController;
+import com.timeTable.Event;
+import com.timeTable.algorithm.Edge;
+import com.timeTable.algorithm.ResourcesAlgorithm;
 import com.timeTable.classes.Miscellaneous;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -23,7 +26,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import org.jgrapht.Graph;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -112,8 +117,8 @@ public class AssignMiscellaneousTableController implements Initializable {
     }
 
     @FXML
-    private void update(ActionEvent event) throws SQLException {
-
+    private void update(ActionEvent event) throws SQLException, FileNotFoundException {
+        ResourcesAlgorithm resourcesAlgorithm = new ResourcesAlgorithm();
         String chalks = chalksText.getText();
         String sponges = spongesText.getText();
         String videoprojectors = videoprojectorsText.getText();
@@ -137,6 +142,11 @@ public class AssignMiscellaneousTableController implements Initializable {
             Miscellaneous.getInstance().setTotalNumberOfSponges(Integer.parseInt(sponges));
             Miscellaneous.getInstance().setTotalNumberOfVideoProjectors(Integer.parseInt(videoprojectors));
             Miscellaneous.getInstance().setTotalNumberOfComputers(Integer.parseInt(computers));
+
+            Graph<Event, Edge> eventsGraph;
+            eventsGraph = resourcesAlgorithm.startAssignClasses();
+
+
 
             loadDate();
         }

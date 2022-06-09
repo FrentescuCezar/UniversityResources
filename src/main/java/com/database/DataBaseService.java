@@ -5,7 +5,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timeTable.Discipline;
 import com.timeTable.Event;
 import com.timeTable.TimeTable;
+import com.timeTable.algorithm.Edge;
 import com.timeTable.classes.*;
+import org.jgrapht.Graph;
+import org.jgrapht.traverse.DepthFirstIterator;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -51,13 +54,48 @@ public class DataBaseService{
           }
         }
 
+    public void addTimeTable( Graph<Event, Edge> eventsGraph) throws JsonProcessingException {
+        try {
+            StringBuilder sql = new StringBuilder("Insert Into TimeTable (TimeTable, day, start, TimeTableInitial.[end], discipline, type, teacher, room, capacity) " +
+                    "Values (?, ?, ?, ?, ?, ?, ?, ?, ?);");
+            PreparedStatement statement = dataBaseController.getDataBaseConnection().getConnection().prepareStatement(String.valueOf(sql), Statement.RETURN_GENERATED_KEYS);
+
+
+                Iterator<Event> iter2 = new DepthFirstIterator<>(eventsGraph);
+                while (iter2.hasNext()) {
+                    Event vertex = iter2.next();
+                    statement.setString(1,vertex.getTimeTableName());
+                    statement.setString(2,vertex.getDayOfWeek());
+                    statement.setString(3,vertex.getStartTime());
+                    statement.setString(4,vertex.getEndTime());
+                    statement.setString(5,vertex.getDiscipline().getName());
+                    statement.setString(6,vertex.getType());
+                    statement.setString(7,mapper.writerWithDefaultPrettyPrinter().writeValueAsString(vertex.getDiscipline().getTeacher()));
+                    statement.setString(8,"");
+                    statement.setInt(9,0);
+
+                    statement.addBatch();
+
+                    DataBaseController.executeSQL(statement);
+                    statement.clearParameters();
+                    System.out.println(sql);
+                }
+
+            statement.close();
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+
         public List<TimeTable> selectTimeTableInitial(){
 
             try {
                 String sql = "Select TimeTable, day, start, TimeTableInitial.[end], discipline, type, teacher, room, capacity from TimeTableInitial;";
                 List<TimeTable> listOfTimeTables = new ArrayList<>();
                 ResultSet resultSet;
-                resultSet = getDataBaseController().selectSQL(sql);
+                resultSet = DataBaseController.selectSQL(sql);
                 String currentTimeTableName = "";
                while (resultSet.next()) {
                    TimeTable timeTable = new TimeTable();

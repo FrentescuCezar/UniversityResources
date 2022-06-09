@@ -84,9 +84,13 @@ public abstract class Room {
     @Override
     public String toString() {
         return "Room{" +
-                "type='" + type + '\'' +
+                "type=" + type +
                 ", name='" + name + '\'' +
                 ", capacity=" + capacity +
+                ", numberOfChalk=" + numberOfChalk +
+                ", numberOfSponges=" + numberOfSponges +
+                ", numberOfVideoProjectors=" + numberOfVideoProjectors +
+                ", numberOfComputers=" + numberOfComputers +
                 '}';
     }
 
