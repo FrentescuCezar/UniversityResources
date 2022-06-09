@@ -3,17 +3,14 @@ package com.scraper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.timeTable.Event;
 import com.timeTable.GraphEvent;
-import com.timeTable.TimeTable;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.traverse.DepthFirstIterator;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
-import java.sql.Time;
 import java.util.*;
 
 public class ScraperApplication {
