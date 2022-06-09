@@ -1,6 +1,8 @@
 package com.example.mavenjavafx;
 
 
+import com.database.DataBaseController;
+import com.timeTable.classes.Miscellaneous;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -31,57 +33,35 @@ public class MiscellaneousController implements Initializable {
     private Parent root;
 
     @FXML
-    private TableColumn<Timetable, Integer> Capacity;
+    private TableColumn<MiscellaneousTable, Integer> Chalk;
 
     @FXML
-    private TableColumn<Timetable, String> Day;
+    private TableColumn<MiscellaneousTable, Integer> Computer;
 
     @FXML
-    private TableColumn<Timetable, String> Discipline;
+    private TableColumn<MiscellaneousTable, Integer> Sponge;
 
     @FXML
-    private TableColumn<Timetable, String> End;
+    private TableColumn<MiscellaneousTable, Integer> Videoprojector;
 
     @FXML
-    private TableColumn<Timetable, String> Room;
-
-    @FXML
-    private TableColumn<Timetable, String> Start;
-
-    @FXML
-    private TableColumn<Timetable, String> Teacher;
-
-    @FXML
-    private TableColumn<Timetable, String> Timetable;
-
-    @FXML
-    private TableColumn<Timetable, String> Type;
-
-    @FXML
-    private TableView<Timetable> table;
+    private TableView<MiscellaneousTable> tableMiscellaneous;
 
     String query = null;
     Connection connection = null;
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
 
-
-
-    ObservableList<Timetable> list = FXCollections.observableArrayList(
+    ObservableList<MiscellaneousTable> list = FXCollections.observableArrayList(
 
     );
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Timetable.setCellValueFactory(new PropertyValueFactory<Timetable, String>("Timetable"));
-        Day.setCellValueFactory(new PropertyValueFactory<Timetable, String>("Day"));
-        Start.setCellValueFactory(new PropertyValueFactory<Timetable, String>("Start"));
-        End.setCellValueFactory(new PropertyValueFactory<Timetable, String>("End"));
-        Discipline.setCellValueFactory(new PropertyValueFactory<Timetable, String>("Discipline"));
-        Type.setCellValueFactory(new PropertyValueFactory<Timetable, String>("Type"));
-        Teacher.setCellValueFactory(new PropertyValueFactory<Timetable, String>("Teacher"));
-        Room.setCellValueFactory(new PropertyValueFactory<Timetable, String>("Room"));
-        Capacity.setCellValueFactory(new PropertyValueFactory<Timetable, Integer>("Capacity"));
+        Chalk.setCellValueFactory(new PropertyValueFactory<MiscellaneousTable, Integer>("Chalk"));
+        Sponge.setCellValueFactory(new PropertyValueFactory<MiscellaneousTable, Integer>("Sponge"));
+        Videoprojector.setCellValueFactory(new PropertyValueFactory<MiscellaneousTable, Integer>("Videoprojector"));
+        Computer.setCellValueFactory(new PropertyValueFactory<MiscellaneousTable, Integer>("Computer"));
 
         wrapText();
 
@@ -91,6 +71,98 @@ public class MiscellaneousController implements Initializable {
             throw new RuntimeException(e);
         }
 
+    }
+
+    private void loadDate() throws SQLException {
+        list.clear();
+        query = "SELECT * FROM Miscellaneous";
+        resultSet = DataBaseController.selectSQL(query);
+
+        while(resultSet.next()){
+            list.add(new MiscellaneousTable(
+                            resultSet.getInt("chalk"),
+                            resultSet.getInt("sponge"),
+                            resultSet.getInt("videoprojector"),
+                            resultSet.getInt("computer")
+                    )
+            );
+        }
+
+        tableMiscellaneous.setItems(list);
+    }
+
+    private void wrapText() {
+        Chalk.setCellFactory(param -> new TableCell<MiscellaneousTable, Integer>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    Text text = new Text(item.toString());
+                    text.setStyle("-fx-text-alignment:justify;");
+                    text.setStyle("-fx-text-fill: white");
+                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
+                    setGraphic(text);
+                }
+            }
+        });
+
+        Sponge.setCellFactory(param -> new TableCell<MiscellaneousTable, Integer>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    Text text = new Text(item.toString());
+                    text.setStyle("-fx-text-alignment:justify;");
+                    text.setStyle("-fx-text-fill: white");
+                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
+                    setGraphic(text);
+                }
+            }
+        });
+
+        Videoprojector.setCellFactory(param -> new TableCell<MiscellaneousTable, Integer>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    Text text = new Text(item.toString());
+                    text.setStyle("-fx-text-alignment:justify;");
+                    text.setStyle("-fx-text-fill: white");
+                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
+                    setGraphic(text);
+                }
+            }
+        });
+
+        Computer.setCellFactory(param -> new TableCell<MiscellaneousTable, Integer>() {
+            @Override
+            protected void updateItem(Integer item, boolean empty) {
+                super.updateItem(item, empty);
+
+                if (item == null || empty) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    Text text = new Text(item.toString());
+                    text.setStyle("-fx-text-alignment:justify;");
+                    text.setStyle("-fx-text-fill: white");
+                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
+                    setGraphic(text);
+                }
+            }
+        });
     }
 
     public void switchToResources(ActionEvent event) throws IOException {
@@ -115,192 +187,47 @@ public class MiscellaneousController implements Initializable {
         stage.show();
     }
 
-    private void loadDate() throws SQLException {
-        list.clear();
+    public void switchToRoom(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Main.class.getResource("miscellaneous-classes.fxml"));
 
-        connection = dataBaseConnection.getConnection();
-        query = "SELECT * FROM TimeTableInitial";
-        preparedStatement = connection.prepareStatement(query);
 
-        resultSet = preparedStatement.executeQuery();
+        root.setOnMousePressed(evt -> {
+            x = evt.getSceneX();
+            y = evt.getSceneY();
+        });
+        root.setOnMouseDragged(evt -> {
+            stage.setX(evt.getScreenX() - x);
+            stage.setY(evt.getScreenY() - y);
+        });
 
-        while(resultSet.next()){
-            list.add(new Timetable(
-                            resultSet.getString("TimeTable"),
-                            resultSet.getString("day"),
-                            resultSet.getString("start"),
-                            resultSet.getString("end"),
-                            resultSet.getString("discipline"),
-                            resultSet.getString("type"),
-                            resultSet.getString("teacher"),
-                            resultSet.getString("room"),
-                            resultSet.getInt("capacity")
-                    )
-            );
-        }
 
-        table.setItems(list);
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+
+
+        stage.setScene(scene);
+        stage.show();
     }
 
-    private void wrapText() {
-        Timetable.setCellFactory(param -> new TableCell<Timetable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
+    public void switchToDisciplines(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Main.class.getResource("miscellaneous.fxml"));
 
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
+
+        root.setOnMousePressed(evt -> {
+            x = evt.getSceneX();
+            y = evt.getSceneY();
+        });
+        root.setOnMouseDragged(evt -> {
+            stage.setX(evt.getScreenX() - x);
+            stage.setY(evt.getScreenY() - y);
         });
 
-        Teacher.setCellFactory(param -> new TableCell<Timetable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
 
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
 
-        Discipline.setCellFactory(param -> new TableCell<Timetable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
 
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.setStyle("-fx-text-fill: white");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
-
-        Day.setCellFactory(param -> new TableCell<Timetable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.setStyle("-fx-text-fill: white");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
-
-        Start.setCellFactory(param -> new TableCell<Timetable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.setStyle("-fx-text-fill: white");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
-
-        End.setCellFactory(param -> new TableCell<Timetable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.setStyle("-fx-text-fill: white");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
-
-        Type.setCellFactory(param -> new TableCell<Timetable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.setStyle("-fx-text-fill: white");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
-
-        Room.setCellFactory(param -> new TableCell<Timetable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.setStyle("-fx-text-fill: white");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
-
-        Capacity.setCellFactory(param -> new TableCell<Timetable, Integer>() {
-            @Override
-            protected void updateItem(Integer item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item.toString());
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.setStyle("-fx-text-fill: white");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
+        stage.setScene(scene);
+        stage.show();
     }
 }

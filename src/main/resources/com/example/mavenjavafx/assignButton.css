@@ -1,0 +1,14 @@
+#assignButton:hover{
+    -fx-cursor: hand;
+    -fx-background-color: #ff3892;
+}
+
+#assignButton{
+    -fx-background-color: #b041b0;
+    -fx-text-fill: white;
+}
+
+.assignButton:focused {
+    -fx-border-color: #FFFFFF;
+    -fx-border-radius: 2;
+}

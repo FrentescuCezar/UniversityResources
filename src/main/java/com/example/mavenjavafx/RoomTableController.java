@@ -292,4 +292,25 @@ public class RoomTableController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+    public void switchToMiscellaneous(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Main.class.getResource("miscellaneous-miscellaneous.fxml"));
+
+
+        root.setOnMousePressed(evt -> {
+            x = evt.getSceneX();
+            y = evt.getSceneY();
+        });
+        root.setOnMouseDragged(evt -> {
+            stage.setX(evt.getScreenX() - x);
+            stage.setY(evt.getScreenY() - y);
+        });
+
+
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+
+
+        stage.setScene(scene);
+        stage.show();
+    }
 }
