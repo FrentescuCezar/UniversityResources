@@ -8,6 +8,7 @@ module com.example.mavenjavafx {
     requires com.fasterxml.jackson.databind;
     requires org.jsoup;
     requires org.jgrapht.core;
+    requires java.desktop;
 
     opens com.example.mavenjavafx to javafx.fxml, com.fasterxml.jackson.databind;
     exports com.example.mavenjavafx;
