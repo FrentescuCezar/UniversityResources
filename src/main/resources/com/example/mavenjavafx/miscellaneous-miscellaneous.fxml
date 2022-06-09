@@ -8,26 +8,28 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mavenjavafx.DisciplineTableController">
+<AnchorPane prefHeight="768.0" prefWidth="1366.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.mavenjavafx.MiscellaneousController">
     <children>
       <ImageView fitHeight="799.0" fitWidth="1388.0" layoutX="-1.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../assets/Miscellaneous.png" />
+            <Image url="@../../../assets/Miscellaneous_Miscellaneous.png" />
          </image>
       </ImageView>
       <Button fx:id="backbutton" layoutX="36.0" layoutY="29.0" mnemonicParsing="false" onAction="#switchToResources" opacity="0.0" prefHeight="82.0" prefWidth="102.0" stylesheets="@backbutton.css" />
-      <TableView fx:id="tableDisciplines" layoutX="491.0" layoutY="190.0" prefHeight="463.0" prefWidth="852.0" stylesheets="@tableview.css">
+      <TableView fx:id="tableMiscellaneous" layoutX="491.0" layoutY="190.0" prefHeight="463.0" prefWidth="852.0" stylesheets="@tableview.css">
         <columns>
-          <TableColumn fx:id="Discipline2" prefWidth="420.0000305175781" text="Discipline" />
-            <TableColumn fx:id="Teacher2" minWidth="0.0" prefWidth="413.599853515625" text="Teacher" />
+          <TableColumn fx:id="Chalk" prefWidth="199.20004272460938" text="Chalk" />
+            <TableColumn fx:id="Sponge" prefWidth="195.2000732421875" text="Sponge" />
+            <TableColumn fx:id="Videoprojector" prefWidth="210.39996337890625" text="Videoprojector" />
+            <TableColumn fx:id="Computer" prefWidth="232.800048828125" text="Computer" />
         </columns>
       </TableView>
-      <Button fx:id="resourceButton" layoutX="138.0" layoutY="435.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="187.0" stylesheets="@resourceButton.css" text="Disciplines">
+      <Button fx:id="resourceButton" layoutX="138.0" layoutY="435.0" mnemonicParsing="false" onAction="#switchToDisciplines" prefHeight="55.0" prefWidth="187.0" stylesheets="@resourceButton.css" text="Disciplines">
          <font>
             <Font name="Barlow Condensed Light" size="25.0" />
          </font>
       </Button>
-      <Button fx:id="resourceButton" layoutX="138.0" layoutY="530.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="187.0" stylesheets="@resourceButton.css" text="Classes">
+      <Button fx:id="resourceButton" layoutX="138.0" layoutY="530.0" mnemonicParsing="false" onAction="#switchToRoom" prefHeight="55.0" prefWidth="187.0" stylesheets="@resourceButton.css" text="Classes">
          <font>
             <Font name="Barlow Condensed Light" size="25.0" />
          </font>

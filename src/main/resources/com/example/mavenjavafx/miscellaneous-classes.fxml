@@ -18,11 +18,11 @@
       <Button fx:id="backbutton" layoutX="36.0" layoutY="29.0" mnemonicParsing="false" onAction="#switchToResources" opacity="0.0" prefHeight="82.0" prefWidth="102.0" stylesheets="@backbutton.css" />
       <TableView fx:id="tableClasses" layoutX="491.0" layoutY="190.0" prefHeight="463.0" prefWidth="852.0" stylesheets="@tableview.css">
         <columns>
-          <TableColumn fx:id="room" prefWidth="136.800048828125" text="Room" />
-            <TableColumn fx:id="type" prefWidth="83.46661376953125" text="Type" />
-            <TableColumn fx:id="capacity" prefWidth="104.26666259765625" text="Capacity" />
-            <TableColumn fx:id="chalks" prefWidth="116.53338623046875" text="Chalks" />
-            <TableColumn fx:id="sponges" prefWidth="120.26666259765625" text="Sponges" />
+          <TableColumn fx:id="room" prefWidth="112.0" text="Room" />
+            <TableColumn fx:id="type" prefWidth="127.20001220703125" text="Type" />
+            <TableColumn fx:id="capacity" prefWidth="104.0" text="Capacity" />
+            <TableColumn fx:id="chalks" prefWidth="110.4000244140625" text="Chalks" />
+            <TableColumn fx:id="sponges" prefWidth="112.0" text="Sponges" />
             <TableColumn fx:id="videoprojectors" prefWidth="128.5333251953125" text="Videoprojectors" />
             <TableColumn fx:id="computers" prefWidth="137.8668212890625" text="Computers" />
         </columns>
@@ -37,7 +37,7 @@
             <Font name="Barlow Condensed Light" size="25.0" />
          </font>
       </Button>
-      <Button fx:id="resourceButton" layoutX="138.0" layoutY="624.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="187.0" stylesheets="@resourceButton.css" text="Miscellaneous">
+      <Button fx:id="resourceButton" layoutX="138.0" layoutY="624.0" mnemonicParsing="false" onAction="#switchToMiscellaneous" prefHeight="55.0" prefWidth="187.0" stylesheets="@resourceButton.css" text="Miscellaneous">
          <font>
             <Font name="Barlow Condensed Light" size="25.0" />
          </font>

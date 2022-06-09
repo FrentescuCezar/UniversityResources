@@ -27,12 +27,12 @@
             <Font name="Barlow Condensed Light" size="25.0" />
          </font>
       </Button>
-      <Button fx:id="resourceButton" layoutX="138.0" layoutY="530.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="187.0" stylesheets="@resourceButton.css" text="Classes">
+      <Button fx:id="resourceButton" layoutX="138.0" layoutY="530.0" mnemonicParsing="false" onAction="#switchToClasses" prefHeight="55.0" prefWidth="187.0" stylesheets="@resourceButton.css" text="Classes">
          <font>
             <Font name="Barlow Condensed Light" size="25.0" />
          </font>
       </Button>
-      <Button fx:id="resourceButton" layoutX="138.0" layoutY="624.0" mnemonicParsing="false" prefHeight="55.0" prefWidth="187.0" stylesheets="@resourceButton.css" text="Miscellaneous">
+      <Button fx:id="resourceButton" layoutX="138.0" layoutY="624.0" mnemonicParsing="false" onAction="#switchToMiscellaneous" prefHeight="55.0" prefWidth="187.0" stylesheets="@resourceButton.css" text="Miscellaneous">
          <font>
             <Font name="Barlow Condensed Light" size="25.0" />
          </font>
