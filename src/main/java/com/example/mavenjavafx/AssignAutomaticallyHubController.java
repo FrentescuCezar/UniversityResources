@@ -33,6 +33,8 @@ public class AssignAutomaticallyHubController implements Initializable {
     private Scene scene;
     private Parent root;
 
+    boolean isTableAssigned = false;
+
     @FXML
     private TableColumn<MiscellaneousTable, Integer> Chalk;
 
@@ -251,6 +253,8 @@ public class AssignAutomaticallyHubController implements Initializable {
 
     public void switchToAutomaticallyClasses(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Main.class.getResource("assign_automatically_classes.fxml"));
+
+        isTableAssigned = true;
 
 
         root.setOnMousePressed(evt -> {

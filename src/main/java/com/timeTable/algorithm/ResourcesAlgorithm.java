@@ -35,9 +35,16 @@ public class ResourcesAlgorithm {
         return eventsGraph;
 
     }
-    public void startAssignResources(){
+    public Graph<Event, Edge> startAssignResources(){
         scraper.startScrape();
-        distributionOfMiscellaneous(scraper.listOfRooms);
+
+        Graph<Event, Edge> eventsGraph;
+        eventsGraph = addAllVertexes(scraper.listOfTimeTables);
+        addAllEdges(eventsGraph);
+
+        distributionOfMiscellaneous(eventsGraph, scraper.listOfRooms);
+
+        return eventsGraph;
     }
 
     public void printGraph(Graph<Event, Edge> eventsGraph){
@@ -208,7 +215,8 @@ public class ResourcesAlgorithm {
         }
     }
 
-    private void distributionOfMiscellaneous(List<Room> allRooms){
+
+    private void distributionOfMiscellaneous(Graph<Event, Edge> eventsGraph, List<Room> allRooms){
         Miscellaneous miscellaneous = Miscellaneous.getInstance();
         int nrLecture = 0;
         int nrSeminary = 0;
@@ -221,10 +229,11 @@ public class ResourcesAlgorithm {
             else if(room1.getType().equals(TypeOfRoom.LABORATORY))
                 nrLaboratory++;
         }
-        Miscellaneous.getInstance().setTotalNumberOfChalk(3000);
-        Miscellaneous.getInstance().setTotalNumberOfComputers(500);
-        Miscellaneous.getInstance().setTotalNumberOfSponges(30);
-        Miscellaneous.getInstance().setTotalNumberOfVideoProjectors(30);
+        Miscellaneous.getInstance().setTotalNumberOfChalk(Miscellaneous.getInstance().getTotalNumberOfChalk());
+
+        Miscellaneous.getInstance().setTotalNumberOfComputers(Miscellaneous.getInstance().getTotalNumberOfComputers());
+        Miscellaneous.getInstance().setTotalNumberOfSponges(Miscellaneous.getInstance().getTotalNumberOfSponges());
+        Miscellaneous.getInstance().setTotalNumberOfVideoProjectors(Miscellaneous.getInstance().getTotalNumberOfVideoProjectors());
 
         int totalNumberOfChalk = miscellaneous.getTotalNumberOfChalk();
         int totalNumberOfSponges = miscellaneous.getTotalNumberOfSponges();

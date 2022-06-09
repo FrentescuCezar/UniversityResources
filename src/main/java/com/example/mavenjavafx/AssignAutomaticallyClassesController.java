@@ -34,12 +34,16 @@ import java.util.ResourceBundle;
 
 import static com.database.DataBaseController.dataBaseConnection;
 
+
+
 public class AssignAutomaticallyClassesController implements Initializable {
 
     double x, y;
     private Stage stage;
     private Scene scene;
     private Parent root;
+
+    public static boolean isTableAssigned = false;
 
     @FXML
     private TableColumn<Timetable, Integer> Capacity;
@@ -95,10 +99,18 @@ public class AssignAutomaticallyClassesController implements Initializable {
         Capacity.setCellValueFactory(new PropertyValueFactory<Timetable, Integer>("Capacity"));
 
         wrapText();
+        if (!isTableAssigned) {
+            try {
+                assignClasses();
+                isTableAssigned = true;
+            } catch (FileNotFoundException | JsonProcessingException | SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         try {
-            assignClasses();
-        } catch (FileNotFoundException | JsonProcessingException | SQLException e) {
+            loadDate();
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
@@ -113,7 +125,7 @@ public class AssignAutomaticallyClassesController implements Initializable {
 
         resultSet = preparedStatement.executeQuery();
 
-        while(resultSet.next()){
+        while (resultSet.next()) {
             list.add(new Timetable(
                             resultSet.getString("TimeTable"),
                             resultSet.getString("day"),
@@ -140,7 +152,6 @@ public class AssignAutomaticallyClassesController implements Initializable {
         DataBaseService dataBaseAlgorithm = new DataBaseService();
         dataBaseAlgorithm.addTimeTable(eventsGraph);
 
-        loadDate();
     }
 
     private void wrapText() {
