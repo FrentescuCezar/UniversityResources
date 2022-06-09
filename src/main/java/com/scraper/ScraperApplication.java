@@ -3,6 +3,7 @@ package com.scraper;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.timeTable.Event;
 import com.timeTable.GraphEvent;
 import com.timeTable.TimeTable;
@@ -10,52 +11,81 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.traverse.DepthFirstIterator;
 
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.sql.Time;
-import java.util.Iterator;
-import java.util.Objects;
+import java.util.*;
 
 public class ScraperApplication {
-    public static void main(String[] args) throws JsonProcessingException {
+    public static void main(String[] args) throws JsonProcessingException, FileNotFoundException {
+        PrintStream fileOut = new PrintStream("C:\\Users\\Razvan-PC\\Documents\\UniversityResources\\src\\main\\java\\com\\scraper\\output.txt");
+        System.setOut(fileOut);
         TimeTableScraper scraper = new TimeTableScraper();
+        ObjectMapper mapper = new ObjectMapper();
+
+        Map<String,String> caca = new HashMap<>();
+
+        caca.put("caca", "asdasdasd");
+        caca.put("s", "asdasdasd");
+        caca.put("cacad", "asdasdasd");
+        caca.put("cacaf", "asdasdasd");
+
+
+        System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(caca));
 
         scraper.startScrape();
 
 
         Graph<Event, DefaultEdge> eventsGraph = GraphEvent.buildEmptySimpleGraph();
 
-        eventsGraph.addVertex(scraper.listOfTimeTables.get(0).listOfEvents.get(0));
         for(int i = 0; i<scraper.listOfTimeTables.size(); ++i){
-            Event aux = scraper.listOfTimeTables.get(0).listOfEvents.get(0);
-            for(int j = 1; j<scraper.listOfTimeTables.get(i).listOfEvents.size(); ++j){
-                Event event1 = scraper.listOfTimeTables.get(i).listOfEvents.get(j);
-                eventsGraph.addVertex(event1);
-
-
-                if(event1.getDayOfWeek().equals(aux.getDayOfWeek())
-                        && event1.getStartTime().equals(aux.getStartTime())
-                        && event1.getEndTime().equals(aux.getEndTime())
-                        && !event1.getDiscipline().equals(aux.getDiscipline())
-                        && !event1.getType().equals(aux.getType())
-                        && !event1.getTimeTableName().equals(aux.getTimeTableName())
-                ){
-                    eventsGraph.addEdge(event1,aux);
+            //Event aux = scraper.listOfTimeTables.get(i).listOfEvents.get(0);
+           // eventsGraph.addVertex(aux);
+            for(int j = 0; j<scraper.listOfTimeTables.get(i).listOfEvents.size(); ++j){
+                Event event = scraper.listOfTimeTables.get(i).listOfEvents.get(j);
+                eventsGraph.addVertex(event);
+               // aux = event1;
                 }
-
-                aux = event1;
 
             }
 
-        }
 
-      ObjectMapper mapper = new ObjectMapper();
       Iterator<Event> iter = new DepthFirstIterator<>(eventsGraph);
+       while (iter.hasNext()) {
+           Event vertex = iter.next();
+           Iterator<Event> iter2 = new DepthFirstIterator<>(eventsGraph);
+           while(iter2.hasNext()){
+               Event vertex2 = iter2.next();
+               if(!vertex.equals(vertex2)){
+                   if(vertex.getDayOfWeek().equals(vertex2.getDayOfWeek())
+                           && vertex.getStartTime().equals(vertex2.getStartTime())
+                           && vertex.getEndTime().equals(vertex2.getEndTime())
+                   && !vertex.equals(vertex2))
+                       eventsGraph.addEdge(vertex,vertex2);
+               }
+           }
+       }
+
+
+      iter = new DepthFirstIterator<>(eventsGraph);
       while (iter.hasNext()) {
           Event vertex = iter.next();
-          System.out
-                  .println(
-                          "Vertex " + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(vertex) + " is connected to: "
-                                  + eventsGraph.outgoingEdgesOf(vertex));
+         //ystem.out
+         //       .println(
+         //               "Vertex " + mapper.writerWithDefaultPrettyPrinter().writeValueAsString(vertex) + " is connected to: "
+         //
+          //
+          //                     + eventsGraph.outgoingEdgesOf(vertex));
+          System.out.println(vertex + "\n\n\n");
+          Set<DefaultEdge> boss = eventsGraph.outgoingEdgesOf(vertex);
+
+          for(DefaultEdge d : boss)
+              System.out.println(d+"\n");
+
+          System.out.println("\n\n\n\n\n");
       }
+
+
 
     }
 }
