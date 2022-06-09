@@ -1,9 +1,6 @@
 package com.example.mavenjavafx;
 
 import com.database.DataBaseController;
-import com.timeTable.Event;
-import com.timeTable.algorithm.Edge;
-import com.timeTable.algorithm.ResourcesAlgorithm;
 import com.timeTable.classes.Miscellaneous;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -26,7 +23,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.jgrapht.Graph;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -40,7 +36,7 @@ import java.util.regex.Pattern;
 
 import static com.database.DataBaseController.dataBaseConnection;
 
-public class AssignMiscellaneousTableController implements Initializable {
+public class AssignManualTableController implements Initializable {
 
     double x, y;
     private Stage stage;
@@ -93,10 +89,10 @@ public class AssignMiscellaneousTableController implements Initializable {
         Computer.setCellValueFactory(new PropertyValueFactory<MiscellaneousTable, Integer>("Computer"));
 
         wrapText();
-        addTextLimiter(chalksText, 3);
-        addTextLimiter(videoprojectorsText, 1);
-        addTextLimiter(spongesText, 2);
-        addTextLimiter(computersText, 2);
+        addTextLimiter(chalksText, 4);
+        addTextLimiter(videoprojectorsText, 2);
+        addTextLimiter(spongesText, 3);
+        addTextLimiter(computersText, 3);
 
         try {
             loadDate();
@@ -109,7 +105,7 @@ public class AssignMiscellaneousTableController implements Initializable {
             public void handle(MouseEvent mouseEvent) {
                 System.out.println("Chalks total : " + tableAssign.getSelectionModel().getSelectedItem().getChalk());
                 System.out.println("Sponges total : " + tableAssign.getSelectionModel().getSelectedItem().getSponge());
-                System.out.println("Videoprojectos total : " + tableAssign.getSelectionModel().getSelectedItem().getVideoprojector());
+                System.out.println("Video-projectors total : " + tableAssign.getSelectionModel().getSelectedItem().getVideoprojector());
                 System.out.println("Computers total : " + tableAssign.getSelectionModel().getSelectedItem().getChalk());
                 System.out.println();
             }
@@ -118,7 +114,7 @@ public class AssignMiscellaneousTableController implements Initializable {
 
     @FXML
     private void update(ActionEvent event) throws SQLException, FileNotFoundException {
-        ResourcesAlgorithm resourcesAlgorithm = new ResourcesAlgorithm();
+
         String chalks = chalksText.getText();
         String sponges = spongesText.getText();
         String videoprojectors = videoprojectorsText.getText();
@@ -143,8 +139,11 @@ public class AssignMiscellaneousTableController implements Initializable {
             Miscellaneous.getInstance().setTotalNumberOfVideoProjectors(Integer.parseInt(videoprojectors));
             Miscellaneous.getInstance().setTotalNumberOfComputers(Integer.parseInt(computers));
 
-            Graph<Event, Edge> eventsGraph;
-            eventsGraph = resourcesAlgorithm.startAssignClasses();
+
+            System.out.println(Miscellaneous.getInstance().getTotalNumberOfChalk());
+            //ResourcesAlgorithm resourcesAlgorithm = new ResourcesAlgorithm();
+            //Graph<Event, Edge> eventsGraph;
+            //eventsGraph = resourcesAlgorithm.startAssignClasses();
 
 
 
@@ -297,8 +296,8 @@ public class AssignMiscellaneousTableController implements Initializable {
         stage.show();
     }
 
-    public void switchToDisciplines(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Main.class.getResource("miscellaneous.fxml"));
+    public void switchToAutomatically(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Main.class.getResource("assign_hub.fxml"));
 
 
         root.setOnMousePressed(evt -> {
@@ -319,8 +318,8 @@ public class AssignMiscellaneousTableController implements Initializable {
         stage.show();
     }
 
-    public void switchToMiscellaneous(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Main.class.getResource("miscellaneous-miscellaneous.fxml"));
+    public void switchToManual(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(Main.class.getResource("assign.fxml"));
 
 
         root.setOnMousePressed(evt -> {
@@ -340,4 +339,5 @@ public class AssignMiscellaneousTableController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
 }

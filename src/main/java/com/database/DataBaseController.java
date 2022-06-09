@@ -14,7 +14,7 @@ public class DataBaseController {
         try {
             int[] result = preparedStatement.executeBatch();
 
-            System.out.println(Arrays.toString(result));
+            //System.out.println(Arrays.toString(result));
         } catch (SQLException e) {
             e.printStackTrace();
         }
