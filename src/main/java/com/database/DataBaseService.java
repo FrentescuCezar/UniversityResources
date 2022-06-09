@@ -27,25 +27,31 @@ public class DataBaseService{
                       "Values (?, ?, ?, ?, ?, ?, ?, ?, ?);");
               PreparedStatement statement = dataBaseController.getDataBaseConnection().getConnection().prepareStatement(String.valueOf(sql), Statement.RETURN_GENERATED_KEYS);
 
+              int count = 0;
 
               for (TimeTable t : listOfTimeTables) {
                   for (Event e : t.listOfEvents) {
-                      statement.setString(1,t.getNameOfTimeTable());
-                      statement.setString(2,e.getDayOfWeek());
-                      statement.setString(3,e.getStartTime());
-                      statement.setString(4,e.getEndTime());
-                      statement.setString(5,e.getDiscipline().getName());
-                      statement.setString(6,e.getType());
-                      statement.setString(7,mapper.writerWithDefaultPrettyPrinter().writeValueAsString(e.getDiscipline().getTeacher()));
-                      statement.setString(8,"");
-                      statement.setInt(9,0);
+                      count++;
+                      statement.setString(1, t.getNameOfTimeTable());
+                      statement.setString(2, e.getDayOfWeek());
+                      statement.setString(3, e.getStartTime());
+                      statement.setString(4, e.getEndTime());
+                      statement.setString(5, e.getDiscipline().getName());
+                      statement.setString(6, e.getType());
+                      statement.setString(7, mapper.writerWithDefaultPrettyPrinter().writeValueAsString(e.getDiscipline().getTeacher()));
+                      statement.setString(8, "");
+                      statement.setInt(9, 0);
 
                       statement.addBatch();
 
+                      if (count % 50 == 0) {
+                          DataBaseController.executeSQL(statement);
+                          statement.clearParameters();
+                      }
+                  }
                       DataBaseController.executeSQL(statement);
                       statement.clearParameters();
-                      System.out.println(sql);
-                  }
+
               }
               statement.close();
           }
@@ -56,30 +62,37 @@ public class DataBaseService{
 
     public void addTimeTable( Graph<Event, Edge> eventsGraph) throws JsonProcessingException {
         try {
-            String sql = "Insert Into TimeTable (TimeTable, day, start, TimeTableInitial.[end], discipline, type, teacher, room, capacity) " +
+            String sql = "Insert Into TimeTable (TimeTable, day, start, TimeTable.[end], discipline, type, teacher, room, capacity) " +
                     "Values (?, ?, ?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement statement = dataBaseController.getDataBaseConnection().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
+            int count = 0;
 
                 Iterator<Event> iter2 = new DepthFirstIterator<>(eventsGraph);
                 while (iter2.hasNext()) {
                     Event vertex = iter2.next();
-                    statement.setString(1,vertex.getTimeTableName());
-                    statement.setString(2,vertex.getDayOfWeek());
-                    statement.setString(3,vertex.getStartTime());
-                    statement.setString(4,vertex.getEndTime());
-                    statement.setString(5,vertex.getDiscipline().getName());
-                    statement.setString(6,vertex.getType());
-                    statement.setString(7,mapper.writerWithDefaultPrettyPrinter().writeValueAsString(vertex.getDiscipline().getTeacher()));
-                    statement.setString(8,"");
-                    statement.setInt(9,0);
+                    if (vertex.getRoom() != null) {
+                        count++;
+                        statement.setString(1,vertex.getTimeTableName());
+                        statement.setString(2,vertex.getDayOfWeek());
+                        statement.setString(3,vertex.getStartTime());
+                        statement.setString(4,vertex.getEndTime());
+                        statement.setString(5,vertex.getDiscipline().getName());
+                        statement.setString(6,vertex.getType());
+                        statement.setString(7,mapper.writerWithDefaultPrettyPrinter().writeValueAsString(vertex.getDiscipline().getTeacher()));
+                        statement.setString(8, vertex.getRoom().getName());
+                        statement.setInt(9,vertex.getRoom().getCapacity());
 
-                    statement.addBatch();
+                        statement.addBatch();
 
-                    DataBaseController.executeSQL(statement);
-                    statement.clearParameters();
-                    //System.out.println(sql);
+                        if (count % 200 == 0) {
+                            DataBaseController.executeSQL(statement);
+                            statement.clearParameters();
+                        }
+                    }
                 }
+            DataBaseController.executeSQL(statement);
+            statement.clearParameters();
 
             statement.close();
         }

@@ -137,8 +137,9 @@ public class AssignAutomaticallyClassesController implements Initializable {
         Graph<Event, Edge> eventsGraph;
         eventsGraph = resourcesAlgorithm.startAssignClasses();
 
-        DataBaseService algorithm = new DataBaseService();
-        algorithm.addTimeTable(eventsGraph);
+        DataBaseService dataBaseAlgorithm = new DataBaseService();
+        dataBaseAlgorithm.addTimeTable(eventsGraph);
+
         loadDate();
     }
 

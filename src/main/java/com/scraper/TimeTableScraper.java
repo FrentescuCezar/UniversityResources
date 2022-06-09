@@ -1,8 +1,6 @@
 package com.scraper;
 
 import com.database.DataBaseService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timeTable.Discipline;
 import com.timeTable.Event;
 import com.timeTable.classes.*;
@@ -18,7 +16,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
-public class TimeTableScraper {
+public class  TimeTableScraper {
 
     private static final String url = "https://profs.info.uaic.ro/~orar/globale/orar_complet.html";
     private static final String userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36";
@@ -72,30 +70,23 @@ public class TimeTableScraper {
         Elements tables = document.getElementsByTag("table");
         Set<String> setOfUrl = new HashSet<>();
 
-        int indexOfTimeTable = 0;
-        int indexOfEvents;
         for (Element e : tables) {
-            indexOfEvents = 0;
             if (!daysOfWeek.contains(Objects.requireNonNull(e.select("td").first()).text())) {
                 continue;
             }
 
             Elements trTable = e.getElementsByTag("tr");
-            TimeTable timeTable = listOfTimeTables.get(indexOfTimeTable);
             for (Element tr : trTable) {
                 Elements tdTable = tr.getElementsByTag("td");
                 int count = 0;
                 for (Element td : tdTable) {
                     if (daysOfWeek.contains(td.text())) {
-                        indexOfEvents--;
 
                     } else if (count == 6) {
-                        // Event event = timeTable.listOfEvents.get(indexOfEvents);
 
                         Room room;
                         String urlToConnectRoom = td.select("a").attr("href");
 
-                        //System.out.println(urlToConnectRoom);
                         Thread.sleep(500);
 
                         Connection connectToClass = Jsoup.connect("https://profs.info.uaic.ro/~orar" + urlToConnectRoom.replaceFirst(".", "").replaceFirst(".", "")).userAgent(getUserAgent());
@@ -116,7 +107,7 @@ public class TimeTableScraper {
 
 
                         if (td.text().equals("")) {
-                            // System.out.println(event);
+
                         } else {
                             room = createRoom(info);
                             if (info.replaceAll("[^0-9]+", "").equals("")) {
@@ -124,28 +115,18 @@ public class TimeTableScraper {
                             } else {
                                 room.setCapacity(Integer.parseInt(info.replaceAll("[^0-9]+", "")));
                             }
-                            //room.setLinkToClass(td.select("a").attr("href"));
                             room.setName(td.text());
                             listOfRooms.add(room);
-                            //event.setRoom(room);
 
-                            //System.out.println(td.text());
-                            //System.out.println(info);
                             System.out.println(room.getName());
                             System.out.println(room.getCapacity());
                             System.out.println(room);
 
                         }
-                        //System.out.println(room.getCapacity());
-                        // System.out.println(room.getName());
-
-
                     }
                     count++;
                 }
-                indexOfEvents++;
             }
-            indexOfTimeTable++;
         }
     }
 
@@ -375,9 +356,6 @@ public class TimeTableScraper {
             this.listOfRooms = dataBaseService.selectRoomInitial();
 
 
-            Miscellaneous miscellaneous = Miscellaneous.getInstance();
-
-
 
         } catch (IOException | SQLException ex) {
             ex.printStackTrace();
@@ -388,15 +366,6 @@ public class TimeTableScraper {
         List<TimeTable> newListOfTimeTables = listOfTimeTables;
         newListOfTimeTables.removeIf(t -> t.checkNameTimeTableForFilter(t));
         this.listOfTimeTables = newListOfTimeTables;
-    }
-
-    public void printTimeTable(List<TimeTable> listOfTimeTables) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        for (TimeTable t : listOfTimeTables) {
-            for (Event e : t.listOfEvents) {
-                System.out.println(e + "\n\n\n\n");
-            }
-        }
     }
 }
 

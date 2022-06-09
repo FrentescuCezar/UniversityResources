@@ -10,17 +10,12 @@ import org.jgrapht.Graph;
 import org.jgrapht.traverse.DepthFirstIterator;
 
 import java.io.FileNotFoundException;
-import java.io.PrintStream;
 import java.util.*;
 
 public class ResourcesAlgorithm {
         TimeTableScraper scraper = new TimeTableScraper();
 
     public Graph<Event, Edge> startAssignClasses() throws FileNotFoundException {
-        PrintStream fileOut = new PrintStream("src\\main\\java\\com\\scraper\\output.txt");
-        System.setOut(fileOut);
-
-
         scraper.startScrape();
 
         Graph<Event, Edge> eventsGraph;
@@ -36,8 +31,6 @@ public class ResourcesAlgorithm {
 
         distributionOfClassesAlgorithm(roomsAssignedMap,eventsGraph,scraper.listOfRooms);
 
-
-        printGraph(eventsGraph);
 
         return eventsGraph;
 
@@ -75,7 +68,7 @@ public class ResourcesAlgorithm {
         return eventsGraph;
     }
 
-    private Graph<Event, Edge> addAllEdges(Graph<Event, Edge> eventsGraph) {
+    private void addAllEdges(Graph<Event, Edge> eventsGraph) {
         Iterator<Event> iter = new DepthFirstIterator<>(eventsGraph);
         while (iter.hasNext()) {
             Event vertex = iter.next();
@@ -91,7 +84,6 @@ public class ResourcesAlgorithm {
                 }
             }
         }
-        return eventsGraph;
     }
 
     private Map<List<String>, List<Room>> createAssignedRoomsMap(Graph<Event, Edge> eventsGraph) {
@@ -106,7 +98,7 @@ public class ResourcesAlgorithm {
     }
 
 
-    private Graph<Event, Edge> distributionOfClassesAlgorithm(Map<List<String>, List<Room>> roomsAssignedMap, Graph<Event, Edge> eventsGraph, List<Room> allRooms) {
+    private void distributionOfClassesAlgorithm(Map<List<String>, List<Room>> roomsAssignedMap, Graph<Event, Edge> eventsGraph, List<Room> allRooms) {
         Iterator<Event> iter = new DepthFirstIterator<>(eventsGraph);
         while (iter.hasNext()) {
             Event vertex = iter.next();
@@ -116,93 +108,95 @@ public class ResourcesAlgorithm {
             List<Room> listOfRoomsAssigned = new ArrayList<>();
 
             for (Edge d : edges) {
-                List<String> startTimeEndTime = new ArrayList<>(Arrays.asList(vertex.getDayOfWeek(), d.returnSource().getStartTime(), d.returnSource().getEndTime()));
-                if (d.returnSource().getRoom() == null) {
+                Event source = d.returnSource();
+                Event target = d.returnTarget();
+                List<String> startTimeEndTime = new ArrayList<>(Arrays.asList(vertex.getDayOfWeek(), source.getStartTime(), source.getEndTime()));
+                if (source.getRoom() == null) {
                     for (Room r : allRooms) {
-                        if (d.returnSource().getType().equals("C") && r.getType().equals(TypeOfRoom.LECTURE)) {
+                        if (source.getType().equals("C") && r.getType().equals(TypeOfRoom.LECTURE)) {
                             if (!roomsAssignedMap.get(startTimeEndTime).contains(r)) {
-                                d.returnSource().setRoom(r);
+                                source.setRoom(r);
                                 roomsAssignedMap.put(startTimeEndTime, listOfRoomsAssigned);
                                 listOfRoomsAssigned.add(r);
                                 break;
                             }
 
                         }
-                        if (d.returnSource().getType().equals("S") && r.getType().equals(TypeOfRoom.SEMINARY)) {
+                        if (source.getType().equals("S") && r.getType().equals(TypeOfRoom.SEMINARY)) {
                             if (!roomsAssignedMap.get(startTimeEndTime).contains(r)) {
-                                d.returnSource().setRoom(r);
+                                source.setRoom(r);
                                 roomsAssignedMap.put(startTimeEndTime, listOfRoomsAssigned);
                                 listOfRoomsAssigned.add(r);
                                 break;
                             }
                         }
 
-                        if (d.returnSource().getType().equals("L") && r.getType().equals(TypeOfRoom.LABORATORY)) {
+                        if (source.getType().equals("L") && r.getType().equals(TypeOfRoom.LABORATORY)) {
                             if (!roomsAssignedMap.get(startTimeEndTime).contains(r)) {
-                                d.returnSource().setRoom(r);
+                                source.setRoom(r);
                                 roomsAssignedMap.put(startTimeEndTime, listOfRoomsAssigned);
                                 listOfRoomsAssigned.add(r);
                                 break;
                             }
                         }
 
-                        if (d.returnSource().getType().equals("A") && r.getType().equals(TypeOfRoom.SEMINARY)) {
+                        if (source.getType().equals("A") && r.getType().equals(TypeOfRoom.SEMINARY)) {
                             if (!roomsAssignedMap.get(startTimeEndTime).contains(r)) {
-                                d.returnSource().setRoom(r);
+                                source.setRoom(r);
                                 roomsAssignedMap.put(startTimeEndTime, listOfRoomsAssigned);
                                 listOfRoomsAssigned.add(r);
                                 break;
                             }
                         }
-                        if (d.returnSource().getType().equals("PC") && r.getType().equals(TypeOfRoom.LABORATORY)) {
+                        if (source.getType().equals("PC") && r.getType().equals(TypeOfRoom.LABORATORY)) {
                             if (!roomsAssignedMap.get(startTimeEndTime).contains(r)) {
-                                d.returnSource().setRoom(r);
+                                source.setRoom(r);
                                 roomsAssignedMap.put(startTimeEndTime, listOfRoomsAssigned);
                                 listOfRoomsAssigned.add(r);
                                 break;
                             }
                         }
                     }
-                } else if (d.returnTarget().getRoom() == null) {
+                } else if (target.getRoom() == null) {
                     for (Room r : allRooms) {
-                        if (d.returnTarget().getType().equals("C") && r.getType().equals(TypeOfRoom.LECTURE)) {
+                        if (target.getType().equals("C") && r.getType().equals(TypeOfRoom.LECTURE)) {
                             if (!roomsAssignedMap.get(startTimeEndTime).contains(r)) {
-                                d.returnTarget().setRoom(r);
+                                target.setRoom(r);
                                 roomsAssignedMap.put(startTimeEndTime, listOfRoomsAssigned);
                                 listOfRoomsAssigned.add(r);
                                 break;
                             }
 
                         }
-                        if (d.returnTarget().getType().equals("S") && r.getType().equals(TypeOfRoom.SEMINARY)) {
+                        if (target.getType().equals("S") && r.getType().equals(TypeOfRoom.SEMINARY)) {
                             if (!roomsAssignedMap.get(startTimeEndTime).contains(r)) {
-                                d.returnTarget().setRoom(r);
+                                target.setRoom(r);
                                 roomsAssignedMap.put(startTimeEndTime, listOfRoomsAssigned);
                                 listOfRoomsAssigned.add(r);
                                 break;
                             }
                         }
 
-                        if (d.returnTarget().getType().equals("L") && r.getType().equals(TypeOfRoom.LABORATORY)) {
+                        if (target.getType().equals("L") && r.getType().equals(TypeOfRoom.LABORATORY)) {
                             if (!roomsAssignedMap.get(startTimeEndTime).contains(r)) {
-                                d.returnTarget().setRoom(r);
+                                target.setRoom(r);
                                 roomsAssignedMap.put(startTimeEndTime, listOfRoomsAssigned);
                                 listOfRoomsAssigned.add(r);
                                 break;
                             }
                         }
 
-                        if (d.returnTarget().getType().equals("A") && r.getType().equals(TypeOfRoom.SEMINARY)) {
+                        if (target.getType().equals("A") && r.getType().equals(TypeOfRoom.SEMINARY)) {
                             if (!roomsAssignedMap.get(startTimeEndTime).contains(r)) {
-                                d.returnTarget().setRoom(r);
+                                target.setRoom(r);
                                 roomsAssignedMap.put(startTimeEndTime, listOfRoomsAssigned);
                                 listOfRoomsAssigned.add(r);
                                 break;
                             }
                         }
-                        if (d.returnTarget().getType().equals("PC") && r.getType().equals(TypeOfRoom.LABORATORY)) {
+                        if (target.getType().equals("PC") && r.getType().equals(TypeOfRoom.LABORATORY)) {
                             if (!roomsAssignedMap.get(startTimeEndTime).contains(r)) {
-                                d.returnTarget().setRoom(r);
+                                target.setRoom(r);
                                 roomsAssignedMap.put(startTimeEndTime, listOfRoomsAssigned);
                                 listOfRoomsAssigned.add(r);
                                 break;
@@ -212,7 +206,6 @@ public class ResourcesAlgorithm {
                 }
             }
         }
-        return eventsGraph;
     }
 
     private void distributionOfMiscellaneous(List<Room> allRooms){
