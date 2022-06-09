@@ -14,5 +14,6 @@ module com.example.mavenjavafx {
     exports com.example.mavenjavafx;
     exports com.timeTable;
     exports com.timeTable.classes;
+    exports com.timeTable.algorithm;
 
 }

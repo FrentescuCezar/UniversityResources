@@ -47,6 +47,24 @@ public class Miscellaneous {
         return totalNumberOfComputers;
     }
 
+
+    public int minusNumberOfChalk(int chalk){
+        this.totalNumberOfChalk = this.totalNumberOfChalk-chalk;
+        return this.totalNumberOfChalk;
+    }
+    public int minusNumberOfSponges(int sponges){
+        this.totalNumberOfSponges = this.totalNumberOfSponges-sponges;
+        return this.totalNumberOfSponges;
+    }
+    public int minusNumberOfVideoProjectors(int projectors){
+        this.totalNumberOfVideoProjectors = this.totalNumberOfVideoProjectors-projectors;
+        return this.totalNumberOfVideoProjectors;
+    }
+    public int minusNumberOfComputers(int computers){
+        this.totalNumberOfComputers = this.totalNumberOfComputers-computers;
+        return this.totalNumberOfComputers;
+    }
+
     public static Miscellaneous getInstance()
     {
         if (single_instance == null)

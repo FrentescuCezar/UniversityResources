@@ -1,16 +1,17 @@
-package com.timeTable;
+package com.timeTable.algorithm;
 
+import com.timeTable.Event;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.builder.GraphTypeBuilder;
 
-import java.sql.Time;
 
-public class GraphEvent {
-    public static Graph<Event, DefaultEdge> buildEmptySimpleGraph()
+public class GraphEvent{
+
+    public static Graph<Event, Edge> buildEmptySimpleGraph()
     {
         return GraphTypeBuilder
                 .<Event, DefaultEdge> undirected().allowingMultipleEdges(false)
-                .allowingSelfLoops(false).edgeClass(DefaultEdge.class).weighted(false).buildGraph();
+                .allowingSelfLoops(false).edgeClass(Edge.class).weighted(false).buildGraph();
     }
 }

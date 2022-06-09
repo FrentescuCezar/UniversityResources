@@ -2,11 +2,12 @@ package com.timeTable;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.timeTable.classes.Room;
+import org.jgrapht.graph.DefaultEdge;
 
 import java.util.List;
 import java.util.Objects;
 
-public class Event {
+public class Event{
     private String timeTableName;
     private String dayOfWeek;
     private String startTime;
@@ -15,11 +16,7 @@ public class Event {
     private String type;
     private Room room;
 
-    @JsonIgnore
-    private String linkToRoom;
-
-    public Event() {
-    }
+    public Event() {}
 
     public Room getRoom() {
         return room;
@@ -88,7 +85,6 @@ public class Event {
                 ", discipline=" + discipline +
                 ", type='" + type + '\'' +
                 ", room=" + room +
-                ", linkToRoom='" + linkToRoom + '\'' +
                 '}';
     }
 

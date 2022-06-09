@@ -5,11 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timeTable.Discipline;
 import com.timeTable.Event;
-import com.timeTable.classes.Laboratory;
-import com.timeTable.classes.Lecture;
-import com.timeTable.classes.Room;
+import com.timeTable.classes.*;
 import com.timeTable.TimeTable;
-import com.timeTable.classes.Seminary;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,6 +15,7 @@ import org.jsoup.select.Elements;
 
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 
 public class TimeTableScraper {
@@ -27,7 +25,7 @@ public class TimeTableScraper {
     private static final String referer = "https://google.com";
     private static final List<String> daysOfWeek = new ArrayList<>(Arrays.asList("Luni", "Marti", "Miercuri", "Joi", "Vineri", "Sambata", "Duminica"));
     public List<TimeTable> listOfTimeTables = new ArrayList<>();
-    public Set<Room> listOfRooms = new HashSet<>();
+    public List<Room> listOfRooms = new ArrayList<>();
     public String getReefer() {
         return referer;
     }
@@ -126,7 +124,7 @@ public class TimeTableScraper {
                             else{
                                 room.setCapacity(Integer.parseInt(info.replaceAll("[^0-9]+", "")));
                             }
-                            room.setLinkToClass(td.select("a").attr("href"));
+                            //room.setLinkToClass(td.select("a").attr("href"));
                             room.setName(td.text());
                             listOfRooms.add(room);
                             //event.setRoom(room);
@@ -369,9 +367,19 @@ public class TimeTableScraper {
             nameOfDiscipline(document,listOfTimeTables);
             type(document,listOfTimeTables);
             nameOfTeacher(document,listOfTimeTables);
-            //room(document,listOfTimeTables,listOfRooms);
+            //room....
 
             DataBaseService dataBaseService = new DataBaseService();
+
+            filterTimeTables();
+
+
+            this.listOfRooms = dataBaseService.selectRoomInitial();
+
+
+            Miscellaneous miscellaneous = Miscellaneous.getInstance();
+
+            dataBaseService.selectMiscellaneous();
 
             //dataBaseService.addTimeTableInitial(listOfTimeTables);
             //dataBaseService.addDisciplines(listOfTimeTables);
@@ -379,22 +387,27 @@ public class TimeTableScraper {
 
             //dataBaseService.addRoomsInitial(listOfRooms);
 
-           // printTimeTable(listOfTimeTables);
+            //printTimeTable(listOfTimeTables);
 
 
-        } catch (IOException ex) {// InterruptedException ex) {
+        } catch (IOException | SQLException ex) {// InterruptedException ex) {
             ex.printStackTrace();
         }
     }
 
-    private void printTimeTable(List<TimeTable> listOfTimeTables) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        for (TimeTable t : listOfTimeTables) {
-            //System.out.println(t.getNameOfTimeTable());
-            System.out.println(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(t));
-        }
+    private void filterTimeTables(){
+        List<TimeTable> newListOfTimeTables = listOfTimeTables;
+        newListOfTimeTables.removeIf(t -> t.checkNameTimeTableForFilter(t));
+        this.listOfTimeTables = newListOfTimeTables;
     }
 
-
+    public void printTimeTable(List<TimeTable> listOfTimeTables) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        for (TimeTable t : listOfTimeTables) {
+           for(Event e : t.listOfEvents){
+               System.out.println(e + "\n\n\n\n");
+           }
+        }
+    }
 }
 

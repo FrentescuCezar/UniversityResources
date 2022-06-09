@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.timeTable.Discipline;
 import com.timeTable.Event;
 import com.timeTable.TimeTable;
-import com.timeTable.classes.Room;
+import com.timeTable.classes.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -43,9 +43,8 @@ public class DataBaseService{
                       statement.clearParameters();
                       System.out.println(sql);
                   }
-                  statement.close();
-
               }
+              statement.close();
           }
           catch (SQLException e){
               e.printStackTrace();
@@ -115,6 +114,43 @@ public class DataBaseService{
         }
 
 
+        public List<Room> selectRoomInitial() throws SQLException {
+            String sql = "SELECT [room],[capacity],[chalk],[sponge],[computer],[videoprojector],[type] FROM [dbo].[RoomsInitial]";
+
+            List<Room> rooms = new ArrayList<>();
+            ResultSet resultSet;
+            resultSet = DataBaseController.selectSQL(sql);
+
+            while (resultSet.next()) {
+                Room room = null;
+                String type = resultSet.getString(7);
+                if (type.contains("LECTURE")) {
+                    room = new Lecture(0, 0, 0, 0);
+                } else if (type.contains("SEMINARY")) {
+                    room = new Seminary(0, 0, 0, 0);
+                } else if (type.contains("LABORATORY")) {
+                    room = new Laboratory(0, 0, 0, 0);
+                }
+
+                assert room != null;
+
+                room.setName(resultSet.getString(1));
+                room.setCapacity(resultSet.getInt(2));
+                room.setNumberOfChalk(resultSet.getInt(3));
+                room.setNumberOfSponges(resultSet.getInt(4));
+                room.setNumberOfComputers(resultSet.getInt(5));
+                room.setNumberOfVideoProjectors(resultSet.getInt(6));
+
+                rooms.add(room);
+
+
+            }
+
+           return rooms;
+
+        }
+
+
         public void addRoomsInitial(Set<Room> listOfRooms){
             StringBuilder sql;
 
@@ -164,6 +200,20 @@ public class DataBaseService{
 
 
 
+            }
+
+            public void selectMiscellaneous() throws SQLException {
+                String sql = "SELECT * FROM Miscellaneous";
+                ResultSet resultSet = DataBaseController.selectSQL(sql);
+
+                Miscellaneous miscellaneous = Miscellaneous.getInstance();
+
+                while(resultSet.next()) {
+                    miscellaneous.setTotalNumberOfChalk(resultSet.getInt(1));
+                    miscellaneous.setTotalNumberOfSponges(resultSet.getInt(2));
+                    miscellaneous.setTotalNumberOfVideoProjectors(resultSet.getInt(3));
+                    miscellaneous.setTotalNumberOfComputers(resultSet.getInt(4));
+                }
             }
 
 

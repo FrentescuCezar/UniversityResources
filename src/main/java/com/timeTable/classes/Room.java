@@ -23,9 +23,6 @@ public abstract class Room {
         this.numberOfComputers = numberOfComputers;
     }
 
-    @JsonIgnore
-    private String linkToClass;
-
     public int getNumberOfChalk() {
         return numberOfChalk;
     }
@@ -42,9 +39,6 @@ public abstract class Room {
         return numberOfComputers;
     }
 
-    public String getLinkToClass() {
-        return linkToClass;
-    }
 
     public TypeOfRoom getType() {
         return type;
@@ -60,6 +54,7 @@ public abstract class Room {
 
     public void setNumberOfChalk(int numberOfChalk) {
         this.numberOfChalk = numberOfChalk;
+        int i = Miscellaneous.getInstance().getTotalNumberOfChalk() - 1;
     }
 
     public void setNumberOfSponges(int numberOfSponges) {
@@ -72,10 +67,6 @@ public abstract class Room {
 
     public void setNumberOfComputers(int numberOfComputers) {
         this.numberOfComputers = numberOfComputers;
-    }
-
-    public void setLinkToClass(String linkToClass) {
-        this.linkToClass = linkToClass;
     }
 
     public void setName(String name) {
@@ -96,7 +87,6 @@ public abstract class Room {
                 "type='" + type + '\'' +
                 ", name='" + name + '\'' +
                 ", capacity=" + capacity +
-                ", linkToClass='" + linkToClass + '\'' +
                 '}';
     }
 
@@ -105,11 +95,11 @@ public abstract class Room {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Room room = (Room) o;
-        return capacity == room.capacity && numberOfChalk == room.numberOfChalk && numberOfSponges == room.numberOfSponges && numberOfVideoProjectors == room.numberOfVideoProjectors && numberOfComputers == room.numberOfComputers && type == room.type && Objects.equals(name, room.name) && Objects.equals(linkToClass, room.linkToClass);
+        return capacity == room.capacity && numberOfChalk == room.numberOfChalk && numberOfSponges == room.numberOfSponges && numberOfVideoProjectors == room.numberOfVideoProjectors && numberOfComputers == room.numberOfComputers && type == room.type && Objects.equals(name, room.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, name, capacity, numberOfChalk, numberOfSponges, numberOfVideoProjectors, numberOfComputers, linkToClass);
+        return Objects.hash(type, name, capacity, numberOfChalk, numberOfSponges, numberOfVideoProjectors, numberOfComputers);
     }
 }
