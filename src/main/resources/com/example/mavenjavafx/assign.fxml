@@ -17,16 +17,14 @@
          </image>
       </ImageView>
       <Button fx:id="backbutton" layoutX="36.0" layoutY="29.0" mnemonicParsing="false" onAction="#switchToResources" opacity="0.0" prefHeight="82.0" prefWidth="102.0" stylesheets="@backbutton.css" />
-      <TableView fx:id="tableAssign" layoutX="491.0" layoutY="190.0" prefHeight="463.0" prefWidth="852.0" stylesheets="@tableview.css">
-         <columns>
-            <TableColumn fx:id="room" prefWidth="117.60003662109375" text="Room" />
-            <TableColumn fx:id="type" prefWidth="120.0" text="Type" />
-            <TableColumn fx:id="capacity" prefWidth="108.79998779296875" text="Capacity" />
-            <TableColumn fx:id="chalks" prefWidth="109.5999755859375" text="Chalks" />
-            <TableColumn fx:id="sponges" prefWidth="132.800048828125" text="Sponges" />
-            <TableColumn fx:id="videoprojectors" prefWidth="119.2000732421875" text="Videoprojectors" />
-            <TableColumn fx:id="computers" prefWidth="123.2000732421875" text="Computers" />
-         </columns></TableView>
+        <TableView fx:id="tableAssign" layoutX="491.0" layoutY="190.0" prefHeight="463.0" prefWidth="852.0" stylesheets="@tableview.css">
+            <columns>
+                <TableColumn fx:id="Chalk" prefWidth="199.20004272460938" text="Chalk" />
+                <TableColumn fx:id="Sponge" prefWidth="195.2000732421875" text="Sponge" />
+                <TableColumn fx:id="Videoprojector" prefWidth="210.39996337890625" text="Videoprojector" />
+                <TableColumn fx:id="Computer" prefWidth="232.800048828125" text="Computer" />
+            </columns>
+        </TableView>
       <TextField fx:id="chalksText" layoutX="181.0" layoutY="446.0" prefHeight="32.0" prefWidth="170.0" />
       <TextField fx:id="spongesText" layoutX="188.0" layoutY="498.0" prefHeight="32.0" prefWidth="164.0" />
       <TextField fx:id="videoprojectorsText" layoutX="262.0" layoutY="549.0" prefHeight="32.0" prefWidth="89.0" />
@@ -41,7 +39,7 @@
             <Font name="Barlow Condensed Regular" size="19.0" />
          </font>
       </Button>
-      <Button fx:id="assignButton" layoutX="171.0" layoutY="659.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="108.0" scaleShape="false" stylesheets="@assignButton.css" text="SUBMIT">
+      <Button fx:id="assignButton" layoutX="171.0" layoutY="659.0" mnemonicParsing="false" onAction="#update" prefHeight="40.0" prefWidth="108.0" scaleShape="false" stylesheets="@assignButton.css" text="SUBMIT">
          <font>
             <Font name="Barlow Condensed Regular" size="20.0" />
          </font>
