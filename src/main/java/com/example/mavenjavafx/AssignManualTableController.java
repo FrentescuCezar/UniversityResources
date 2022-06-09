@@ -1,6 +1,7 @@
 package com.example.mavenjavafx;
 
 import com.database.DataBaseController;
+import com.database.DataBaseService;
 import com.timeTable.classes.Miscellaneous;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -139,8 +140,7 @@ public class AssignManualTableController implements Initializable {
             Miscellaneous.getInstance().setTotalNumberOfVideoProjectors(Integer.parseInt(videoprojectors));
             Miscellaneous.getInstance().setTotalNumberOfComputers(Integer.parseInt(computers));
 
-
-            System.out.println(Miscellaneous.getInstance().getTotalNumberOfChalk());
+            //System.out.println(Miscellaneous.getInstance().getTotalNumberOfChalk());
             //ResourcesAlgorithm resourcesAlgorithm = new ResourcesAlgorithm();
             //Graph<Event, Edge> eventsGraph;
             //eventsGraph = resourcesAlgorithm.startAssignClasses();

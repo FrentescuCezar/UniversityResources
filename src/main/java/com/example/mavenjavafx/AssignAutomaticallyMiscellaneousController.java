@@ -40,6 +40,8 @@ public class AssignAutomaticallyMiscellaneousController implements Initializable
     private Scene scene;
     private Parent root;
 
+    public static boolean isTableAssigned = false;
+
     @FXML
     private TableColumn<RoomTable, Integer> capacity;
 
@@ -86,12 +88,20 @@ public class AssignAutomaticallyMiscellaneousController implements Initializable
 
         wrapText();
 
+        if (!isTableAssigned) {
+            try {
+                assignMiscellaneous();
+                isTableAssigned = true;
+            } catch (FileNotFoundException | JsonProcessingException | SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         try {
             loadDate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
 
     }
 
@@ -124,14 +134,14 @@ public class AssignAutomaticallyMiscellaneousController implements Initializable
 
 
     void assignMiscellaneous() throws FileNotFoundException, JsonProcessingException, SQLException {
+
         ResourcesAlgorithm resourcesAlgorithm = new ResourcesAlgorithm();
-
         Graph<Event, Edge> eventsGraph;
-        eventsGraph = resourcesAlgorithm.startAssignClasses();
+        eventsGraph = resourcesAlgorithm.startAssignResources();
 
-        DataBaseService algorithm = new DataBaseService();
-        algorithm.addTimeTable(eventsGraph);
-        loadDate();
+        DataBaseService dataBaseAlgorithm = new DataBaseService();
+        dataBaseAlgorithm.addRoomsMiscellaneous(eventsGraph);
+
     }
 
 

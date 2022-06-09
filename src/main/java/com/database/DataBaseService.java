@@ -101,6 +101,43 @@ public class DataBaseService{
         }
     }
 
+    public void addRoomsMiscellaneous( Graph<Event, Edge> eventsGraph) throws JsonProcessingException {
+        try {
+            String sql = "Insert Into Rooms (room, capacity, chalk, sponge, computer, videoprojector) " +
+                    "Values (?, ?, ?, ?, ?, ?);";
+            PreparedStatement statement = dataBaseController.getDataBaseConnection().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            int count = 0;
+
+            Iterator<Event> iter2 = new DepthFirstIterator<>(eventsGraph);
+            while (iter2.hasNext()) {
+                Event vertex = iter2.next();
+                if (vertex.getRoom() != null) {
+                    count++;
+                    statement.setString(1,vertex.getRoom().getName());
+                    statement.setInt(2,vertex.getRoom().getCapacity());
+                    statement.setInt(3,vertex.getRoom().getNumberOfChalk());
+                    statement.setInt(4,vertex.getRoom().getNumberOfSponges());
+                    statement.setInt(5,vertex.getRoom().getNumberOfComputers());
+                    statement.setInt(6,vertex.getRoom().getNumberOfVideoProjectors());
+                    statement.addBatch();
+
+                    if (count % 200 == 0) {
+                        DataBaseController.executeSQL(statement);
+                        statement.clearParameters();
+                    }
+                }
+            }
+            DataBaseController.executeSQL(statement);
+            statement.clearParameters();
+
+            statement.close();
+        }
+        catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
 
         public List<TimeTable> selectTimeTableInitial(){
 
@@ -253,7 +290,7 @@ public class DataBaseService{
 
             }
 
-            public void selectMiscellaneous() throws SQLException {
+            public static void selectMiscellaneous() throws SQLException {
                 String sql = "SELECT * FROM Miscellaneous";
                 ResultSet resultSet = DataBaseController.selectSQL(sql);
 
