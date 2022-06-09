@@ -1,5 +1,6 @@
 package com.example.mavenjavafx;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -152,9 +153,12 @@ public class AssignMiscellaneousTableController implements Initializable {
                     String s = tf.getText().substring(0, maxLength);
                     tf.setText(s);
                 }
-                if(!(Pattern.compile("[0-9]+").matcher(tf.getText())).matches()){
-                    String s = "";
-                    tf.setText(s);
+                    if(Pattern.compile("[a-zA-Z]").matcher(tf.getText()).find()){
+                    Platform.runLater(() -> {
+                        String s = "";
+                        tf.setText(s);
+                    });
+
                 }
             }
         });
