@@ -9,6 +9,6 @@ import java.io.FileNotFoundException;
 public class ScraperApplication {
     public static void main(String[] args) throws JsonProcessingException, FileNotFoundException {
         ResourcesAlgorithm algorithm = new ResourcesAlgorithm();
-        algorithm.startAlgorithm();
+        //algorithm.startAlgorithm();
     }
 }

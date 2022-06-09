@@ -20,6 +20,7 @@ public class ResourcesAlgorithm {
         PrintStream fileOut = new PrintStream("src\\main\\java\\com\\scraper\\output.txt");
         System.setOut(fileOut);
 
+
         scraper.startScrape();
 
         Graph<Event, Edge> eventsGraph;
@@ -28,15 +29,15 @@ public class ResourcesAlgorithm {
 
         addAllEdges(eventsGraph);
 
-        Map<List<String>, List<Room>> roomsAssignedMap ;
 
+        Map<List<String>, List<Room>> roomsAssignedMap ;
         roomsAssignedMap = createAssignedRoomsMap(eventsGraph);
+
 
         distributionOfClassesAlgorithm(roomsAssignedMap,eventsGraph,scraper.listOfRooms);
 
 
         printGraph(eventsGraph);
-
 
         return eventsGraph;
 

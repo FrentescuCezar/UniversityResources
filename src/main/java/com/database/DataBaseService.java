@@ -56,9 +56,9 @@ public class DataBaseService{
 
     public void addTimeTable( Graph<Event, Edge> eventsGraph) throws JsonProcessingException {
         try {
-            StringBuilder sql = new StringBuilder("Insert Into TimeTable (TimeTable, day, start, TimeTableInitial.[end], discipline, type, teacher, room, capacity) " +
-                    "Values (?, ?, ?, ?, ?, ?, ?, ?, ?);");
-            PreparedStatement statement = dataBaseController.getDataBaseConnection().getConnection().prepareStatement(String.valueOf(sql), Statement.RETURN_GENERATED_KEYS);
+            String sql = "Insert Into TimeTable (TimeTable, day, start, TimeTableInitial.[end], discipline, type, teacher, room, capacity) " +
+                    "Values (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+            PreparedStatement statement = dataBaseController.getDataBaseConnection().getConnection().prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
 
                 Iterator<Event> iter2 = new DepthFirstIterator<>(eventsGraph);
@@ -78,7 +78,7 @@ public class DataBaseService{
 
                     DataBaseController.executeSQL(statement);
                     statement.clearParameters();
-                    System.out.println(sql);
+                    //System.out.println(sql);
                 }
 
             statement.close();
