@@ -17,15 +17,15 @@
       <Button fx:id="backbutton" layoutX="36.0" layoutY="29.0" mnemonicParsing="false" onAction="#switchToResources" opacity="0.0" prefHeight="82.0" prefWidth="102.0" stylesheets="@backbutton.css" />
       <TableView fx:id="table" layoutX="491.0" layoutY="190.0" prefHeight="463.0" prefWidth="852.0" stylesheets="@tableview.css">
         <columns>
-          <TableColumn fx:id="Timetable" prefWidth="143.20001983642578" text="Timetable" />
-          <TableColumn fx:id="Day" minWidth="0.0" prefWidth="43.199981689453125" text="Day" />
-            <TableColumn fx:id="Start" minWidth="0.0" prefWidth="49.60003662109375" text="Start" />
-            <TableColumn fx:id="End" minWidth="4.800048828125" prefWidth="52.79998779296875" text="End" />
-            <TableColumn fx:id="Discipline" prefWidth="212.0" text="Discipline " />
-            <TableColumn fx:id="Type" minWidth="0.0" prefWidth="38.4000244140625" text="Type" />
-            <TableColumn fx:id="Teacher" minWidth="0.0" prefWidth="174.4000244140625" text="Teacher" />
-            <TableColumn fx:id="Room" minWidth="0.0" prefWidth="48.0" text="Room" />
-            <TableColumn fx:id="Capacity" minWidth="0.0" prefWidth="62.4000244140625" text="Capacity" />
+          <TableColumn fx:id="Timetable" prefWidth="143.20001983642578" style="-fx-alignment: center;" text="Timetable" />
+          <TableColumn fx:id="Day" minWidth="0.0" prefWidth="43.199981689453125" style="-fx-alignment: center;" text="Day" />
+            <TableColumn fx:id="Start" minWidth="0.0" prefWidth="49.60003662109375" style="-fx-alignment: center;" text="Start" />
+            <TableColumn fx:id="End" minWidth="4.800048828125" prefWidth="52.79998779296875" style="-fx-alignment: center;" text="End" />
+            <TableColumn fx:id="Discipline" prefWidth="212.0" style="-fx-alignment: center;" text="Discipline " />
+            <TableColumn fx:id="Type" minWidth="0.0" prefWidth="38.4000244140625" style="-fx-alignment: center;" text="Type" />
+            <TableColumn fx:id="Teacher" minWidth="0.0" prefWidth="174.4000244140625" style="-fx-alignment: center;" text="Teacher" />
+            <TableColumn fx:id="Room" minWidth="0.0" prefWidth="48.0" style="-fx-alignment: center;" text="Room" />
+            <TableColumn fx:id="Capacity" minWidth="0.0" prefWidth="62.4000244140625" style="-fx-alignment: center;" text="Capacity" />
         </columns>
       </TableView>
     </children>

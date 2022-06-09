@@ -1,5 +1,7 @@
 package com.example.mavenjavafx;
 
+import com.database.DataBaseController;
+import com.timeTable.classes.Miscellaneous;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -41,28 +43,19 @@ public class AssignMiscellaneousTableController implements Initializable {
     private Parent root;
 
     @FXML
-    private TableColumn<RoomTable, Integer> capacity;
+    private TableColumn<MiscellaneousTable, Integer> Chalk;
 
     @FXML
-    private TableColumn<RoomTable, Integer> chalks;
+    private TableColumn<MiscellaneousTable, Integer> Computer;
 
     @FXML
-    private TableColumn<RoomTable, Integer> computers;
+    private TableColumn<MiscellaneousTable, Integer> Sponge;
 
     @FXML
-    private TableColumn<RoomTable, String> room;
+    private TableColumn<MiscellaneousTable, Integer> Videoprojector;
 
     @FXML
-    private TableColumn<RoomTable, Integer> sponges;
-
-    @FXML
-    private TableView<RoomTable> tableAssign;
-
-    @FXML
-    private TableColumn<RoomTable, String> type;
-
-    @FXML
-    private TableColumn<RoomTable, Integer> videoprojectors;
+    private TableView<MiscellaneousTable> tableAssign;
 
     @FXML
     private TextField videoprojectorsText;
@@ -82,26 +75,23 @@ public class AssignMiscellaneousTableController implements Initializable {
     PreparedStatement preparedStatement = null;
     ResultSet resultSet = null;
 
-    ObservableList<RoomTable> list = FXCollections.observableArrayList(
+    ObservableList<MiscellaneousTable> list = FXCollections.observableArrayList(
 
     );
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        room.setCellValueFactory(new PropertyValueFactory<RoomTable, String>("room"));
-        type.setCellValueFactory(new PropertyValueFactory<RoomTable, String>("type"));
-        capacity.setCellValueFactory(new PropertyValueFactory<RoomTable, Integer>("capacity"));
-        chalks.setCellValueFactory(new PropertyValueFactory<RoomTable, Integer>("chalks"));
-        sponges.setCellValueFactory(new PropertyValueFactory<RoomTable, Integer>("sponges"));
-        videoprojectors.setCellValueFactory(new PropertyValueFactory<RoomTable, Integer>("videoprojectors"));
-        computers.setCellValueFactory(new PropertyValueFactory<RoomTable, Integer>("computers"));
+        Chalk.setCellValueFactory(new PropertyValueFactory<MiscellaneousTable, Integer>("Chalk"));
+        Sponge.setCellValueFactory(new PropertyValueFactory<MiscellaneousTable, Integer>("Sponge"));
+        Videoprojector.setCellValueFactory(new PropertyValueFactory<MiscellaneousTable, Integer>("Videoprojector"));
+        Computer.setCellValueFactory(new PropertyValueFactory<MiscellaneousTable, Integer>("Computer"));
 
         wrapText();
-        addTextLimiter(chalksText,3);
-        addTextLimiter(videoprojectorsText,1);
-        addTextLimiter(spongesText,2);
-        addTextLimiter(computersText,2);
+        addTextLimiter(chalksText, 3);
+        addTextLimiter(videoprojectorsText, 1);
+        addTextLimiter(spongesText, 2);
+        addTextLimiter(computersText, 2);
 
         try {
             loadDate();
@@ -112,27 +102,62 @@ public class AssignMiscellaneousTableController implements Initializable {
         tableAssign.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
-                System.out.println(tableAssign.getSelectionModel().getSelectedItem().getRoom());
+                System.out.println("Chalks total : " + tableAssign.getSelectionModel().getSelectedItem().getChalk());
+                System.out.println("Sponges total : " + tableAssign.getSelectionModel().getSelectedItem().getSponge());
+                System.out.println("Videoprojectos total : " + tableAssign.getSelectionModel().getSelectedItem().getVideoprojector());
+                System.out.println("Computers total : " + tableAssign.getSelectionModel().getSelectedItem().getChalk());
+                System.out.println();
             }
         });
     }
 
+    @FXML
+    private void update(ActionEvent event) throws SQLException {
 
+        String chalks = chalksText.getText();
+        String sponges = spongesText.getText();
+        String videoprojectors = videoprojectorsText.getText();
+        String computers = computersText.getText();
+
+        if (chalks.matches("[0-9]+")
+                && sponges.matches("[0-9]+")
+                && videoprojectors.matches("[0-9]+")
+                && computers.matches("[0-9]+")){
+
+            query = "UPDATE Miscellaneous SET chalk = " + chalks
+                    + ",sponge = " + sponges
+                    + ",videoprojector = " + videoprojectors
+                    + ",computer = " + computers
+                    + " WHERE id = 1";
+
+            preparedStatement = dataBaseConnection.getConnection().prepareStatement(query);
+            preparedStatement.execute();
+
+            Miscellaneous.getInstance().setTotalNumberOfChalk(Integer.parseInt(chalks));
+            Miscellaneous.getInstance().setTotalNumberOfSponges(Integer.parseInt(sponges));
+            Miscellaneous.getInstance().setTotalNumberOfVideoProjectors(Integer.parseInt(videoprojectors));
+            Miscellaneous.getInstance().setTotalNumberOfComputers(Integer.parseInt(computers));
+
+            loadDate();
+        }
+        else if (chalks.matches("[0-9]+")){
+            query = "UPDATE Miscellaneous SET chalk = " + chalks
+                    + " WHERE id = 1";
+
+            preparedStatement = dataBaseConnection.getConnection().prepareStatement(query);
+            preparedStatement.execute();
+            loadDate();
+        }
+    }
 
     private void loadDate() throws SQLException {
         list.clear();
 
-        connection = dataBaseConnection.getConnection();
-        query = "SELECT * FROM RoomsInitial";
-        preparedStatement = connection.prepareStatement(query);
+        query = "SELECT * FROM Miscellaneous";
+        resultSet = DataBaseController.selectSQL(query);
 
-        resultSet = preparedStatement.executeQuery();
-
-        while(resultSet.next()){
-            list.add(new RoomTable(
-                            resultSet.getString("room"),
-                            resultSet.getString("type"),
-                            resultSet.getInt("capacity"),
+        while (resultSet.next()) {
+            list.add(new MiscellaneousTable(
                             resultSet.getInt("chalk"),
                             resultSet.getInt("sponge"),
                             resultSet.getInt("videoprojector"),
@@ -153,7 +178,7 @@ public class AssignMiscellaneousTableController implements Initializable {
                     String s = tf.getText().substring(0, maxLength);
                     tf.setText(s);
                 }
-                    if(Pattern.compile("[a-zA-Z]").matcher(tf.getText()).find()){
+                if (Pattern.compile("[a-zA-Z]").matcher(tf.getText()).find()) {
                     Platform.runLater(() -> {
                         String s = "";
                         tf.setText(s);
@@ -166,42 +191,7 @@ public class AssignMiscellaneousTableController implements Initializable {
 
     private void wrapText() {
 
-        room.setCellFactory(param -> new TableCell<RoomTable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
-
-        type.setCellFactory(param -> new TableCell<RoomTable, String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item);
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.setStyle("-fx-text-fill: white");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
-
-        capacity.setCellFactory(param -> new TableCell<RoomTable, Integer>() {
+        Chalk.setCellFactory(param -> new TableCell<MiscellaneousTable, Integer>() {
             @Override
             protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
@@ -219,7 +209,7 @@ public class AssignMiscellaneousTableController implements Initializable {
             }
         });
 
-        chalks.setCellFactory(param -> new TableCell<RoomTable, Integer>() {
+        Sponge.setCellFactory(param -> new TableCell<MiscellaneousTable, Integer>() {
             @Override
             protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
@@ -237,7 +227,7 @@ public class AssignMiscellaneousTableController implements Initializable {
             }
         });
 
-        sponges.setCellFactory(param -> new TableCell<RoomTable, Integer>() {
+        Videoprojector.setCellFactory(param -> new TableCell<MiscellaneousTable, Integer>() {
             @Override
             protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
@@ -255,25 +245,7 @@ public class AssignMiscellaneousTableController implements Initializable {
             }
         });
 
-        videoprojectors.setCellFactory(param -> new TableCell<RoomTable, Integer>() {
-            @Override
-            protected void updateItem(Integer item, boolean empty) {
-                super.updateItem(item, empty);
-
-                if (item == null || empty) {
-                    setText(null);
-                    setStyle("");
-                } else {
-                    Text text = new Text(item.toString());
-                    text.setStyle("-fx-text-alignment:justify;");
-                    text.setStyle("-fx-text-fill: white");
-                    text.wrappingWidthProperty().bind(getTableColumn().widthProperty().subtract(10));
-                    setGraphic(text);
-                }
-            }
-        });
-
-        computers.setCellFactory(param -> new TableCell<RoomTable, Integer>() {
+        Computer.setCellFactory(param -> new TableCell<MiscellaneousTable, Integer>() {
             @Override
             protected void updateItem(Integer item, boolean empty) {
                 super.updateItem(item, empty);
@@ -291,7 +263,6 @@ public class AssignMiscellaneousTableController implements Initializable {
             }
         });
     }
-
 
 
     public void switchToResources(ActionEvent event) throws IOException {
@@ -337,6 +308,7 @@ public class AssignMiscellaneousTableController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
     public void switchToMiscellaneous(ActionEvent event) throws IOException {
         root = FXMLLoader.load(Main.class.getResource("miscellaneous-miscellaneous.fxml"));
 
