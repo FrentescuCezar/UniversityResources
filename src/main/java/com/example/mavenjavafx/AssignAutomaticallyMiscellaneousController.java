@@ -111,7 +111,7 @@ public class AssignAutomaticallyMiscellaneousController implements Initializable
         list.clear();
 
         connection = dataBaseConnection.getConnection();
-        query = "SELECT * FROM RoomsInitial";
+        query = "SELECT * FROM Rooms";
         preparedStatement = connection.prepareStatement(query);
 
         resultSet = preparedStatement.executeQuery();

@@ -35,13 +35,18 @@ public class ResourcesAlgorithm {
         return eventsGraph;
 
     }
-    public Graph<Event, Edge> startAssignResources(){
+    public Graph<Event, Edge> startAssignResources() throws FileNotFoundException {
         scraper.startScrape();
 
         Graph<Event, Edge> eventsGraph;
         eventsGraph = addAllVertexes(scraper.listOfTimeTables);
         addAllEdges(eventsGraph);
 
+
+        Map<List<String>, List<Room>> roomsAssignedMap ;
+        roomsAssignedMap = createAssignedRoomsMap(eventsGraph);
+
+        distributionOfClassesAlgorithm(roomsAssignedMap,eventsGraph,scraper.listOfRooms);
         distributionOfMiscellaneous(eventsGraph, scraper.listOfRooms);
 
         return eventsGraph;
@@ -230,7 +235,6 @@ public class ResourcesAlgorithm {
                 nrLaboratory++;
         }
         Miscellaneous.getInstance().setTotalNumberOfChalk(Miscellaneous.getInstance().getTotalNumberOfChalk());
-
         Miscellaneous.getInstance().setTotalNumberOfComputers(Miscellaneous.getInstance().getTotalNumberOfComputers());
         Miscellaneous.getInstance().setTotalNumberOfSponges(Miscellaneous.getInstance().getTotalNumberOfSponges());
         Miscellaneous.getInstance().setTotalNumberOfVideoProjectors(Miscellaneous.getInstance().getTotalNumberOfVideoProjectors());

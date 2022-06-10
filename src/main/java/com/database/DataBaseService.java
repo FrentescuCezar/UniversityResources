@@ -112,20 +112,19 @@ public class DataBaseService{
             Iterator<Event> iter2 = new DepthFirstIterator<>(eventsGraph);
             while (iter2.hasNext()) {
                 Event vertex = iter2.next();
-                if (vertex.getRoom() != null) {
-                    count++;
-                    statement.setString(1,vertex.getRoom().getName());
-                    statement.setInt(2,vertex.getRoom().getCapacity());
-                    statement.setInt(3,vertex.getRoom().getNumberOfChalk());
-                    statement.setInt(4,vertex.getRoom().getNumberOfSponges());
-                    statement.setInt(5,vertex.getRoom().getNumberOfComputers());
-                    statement.setInt(6,vertex.getRoom().getNumberOfVideoProjectors());
-                    statement.addBatch();
+                count++;
+                statement.setString(1, vertex.getRoom().getName());
+                statement.setInt(2, vertex.getRoom().getCapacity());
+                statement.setInt(3, vertex.getRoom().getNumberOfChalk());
+                statement.setInt(4, vertex.getRoom().getNumberOfSponges());
+                statement.setInt(5, vertex.getRoom().getNumberOfComputers());
+                statement.setInt(6, vertex.getRoom().getNumberOfVideoProjectors());
+                statement.setString(7, vertex.getRoom().getType().toString());
+                statement.addBatch();
 
-                    if (count % 200 == 0) {
-                        DataBaseController.executeSQL(statement);
-                        statement.clearParameters();
-                    }
+                if (count % 200 == 0) {
+                    DataBaseController.executeSQL(statement);
+                    statement.clearParameters();
                 }
             }
             DataBaseController.executeSQL(statement);
